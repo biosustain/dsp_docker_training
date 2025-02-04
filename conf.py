@@ -6,9 +6,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = "Data Science Platform notes template"
-copyright = "2024, DTU Biosustain, Informatics Platform, DSP"
-author = "Henry Webel"
+project = "Data Club Feb 2025: Docker Introduction"
+copyright = "2025, DTU Biosustain, Informatics Platform, DSP"
+author = "Albert Palleja"
 
 
 # -- General configuration ---------------------------------------------------
