@@ -16,6 +16,16 @@ about
 ```{toctree}
 :maxdepth: 2
 :hidden:
+:caption: Course Information
+
+course_information/Instructions.md
+course_information/Location.md
+course_information/Timing.md
+```
+
+```{toctree}
+:maxdepth: 2
+:hidden:
 :caption: Course contents
 
 course_contents/DockerIntro.md
