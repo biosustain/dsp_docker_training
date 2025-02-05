@@ -50,3 +50,29 @@ Solution:
 docker pull debian:bullseye-slim
 docker images
 ```
+
+
+
+While we would rather reccomend using _virtual environments_ for running speciffic environments interactively, it can be handy to be familiar with dockers ability to run a container in interactive mode.
+
+this is done by adding the two commandline inputs to the `docker run` command `--interactive` and `--tty`  which have the equivalents `-i` and `-t`. 
+They can thus be run with the following syntax:
+
+```
+docker run -it <container-name> <command>
+```
+
+Excercise:
+
+launch the BASH shell (`bash`) in the publicly available `debian:bullseye-slim` container.
+
+Solution:
+
+```
+docker run -it debian:bullseye-slim bash
+```
+
+
+
+
+
