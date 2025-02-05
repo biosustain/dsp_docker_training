@@ -171,7 +171,89 @@ in case this fails, pleas try this alternative:
 docker run nextflow/rnaseq-nf salmon --version
 ```
 
+You can even launch a container in an interactive mode by using the following command:
+```
+docker run -it my-image bash
+```
+Use the `exit` command to terminate the interactive session.
 
 
+
+
+File system mounts:
+Containers run in a completely separate file system and it cannot access the hosting file system by default.
+
+For example, running the following command that is attempting to generate a genome index using the Salmon tool will fail because Salmon cannot access the input file:
+
+```
+docker run my-image \
+    salmon index -t $PWD/data/ggal/transcriptome.fa -i transcript-index
+```
+To mount a filesystem within a Docker container, you can use the `--volume` command-line option when running the container. Its argument consists of two fields separated by a colon (:):
+
+Host source directory path
+Container target directory path
+For example:
+
+```
+docker run --volume $PWD/data/ggal/transcriptome.fa:/transcriptome.fa my-image \
+    salmon index -t /transcriptome.fa -i transcript-index
+```
+Warning
+
+The generated transcript-index directory is still not accessible in the host file system.
+
+An easier way to mount file systems is to mount a parent directory to an identical directory in the container. This allows you to use the same path when running it in the container. For example:
+
+```
+docker run --volume $PWD:$PWD --workdir $PWD my-image \
+    salmon index -t $PWD/data/ggal/transcriptome.fa -i transcript-index
+```
+Or set a folder you want to mount as an environmental variable, called `DATA`:
+
+```
+DATA=/workspace/gitpod/nf-training/data
+docker run --volume $DATA:$DATA --workdir $PWD my-image \
+    salmon index -t $PWD/data/ggal/transcriptome.fa -i transcript-index
+```
+You can check the content of the transcript-index folder by entering the command:
+
+```
+ls -la transcript-index
+```
+
+Note that the permissions for files created by the Docker execution is root.
+
+Upload the container in the Docker Hub (optional)
+You can also publish your container in the Docker Hub to share it with other people.
+
+Create an account on the https://hub.docker.com website. Then from your shell terminal run the following command, entering the user name and password you specified when registering in the Hub:
+```
+docker login
+```
+Rename the image to include your Docker user name account:
+```
+docker tag my-image <user-name>/my-image
+```
+Finally push it to the Docker Hub:
+
+```
+docker push <user-name>/my-image
+```
+After that anyone will be able to download it by using the command:
+
+```
+docker pull <user-name>/my-image
+```
+Note how after a pull and push operation, Docker prints the container digest number e.g.
+```
+Output
+
+Digest: sha256:aeacbd7ea1154f263cda972a96920fb228b2033544c2641476350b9317dab266
+Status: Downloaded newer image for nextflow/rnaseq-nf:latest
+```
+This is a unique and immutable identifier that can be used to reference a container image in a univocally manner. For example:
+
+`docker pull nextflow/rnaseq-nf@sha256:aeacbd7ea1154f263cda972a96920fb228b2033544c2641476350b9317dab266`
 
 
