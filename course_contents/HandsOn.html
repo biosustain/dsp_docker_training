@@ -405,10 +405,44 @@ ENV PATH=$PATH:/usr/games/
 <li><p>Build your docker file to an image</p></li>
 <li><p>run the command <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">&lt;my-image-name&gt;</span> <span class="pre">cowsay</span> <span class="pre">'Hej</span> <span class="pre">DTU!'</span></code></p></li>
 </ul>
-<p>Excercise:
-make your own dockerfile inspired by the one above and build it</p>
 <p>Say you have identified a container that you want to run with your scrip, but a key piece of software is missing.
 We can modify the container by adding some lines ot code to the Dockerfile which is used to generate the docker image used to spin up the docker container which we will use.</p>
+<p>Not all tools needed can be installed with <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> and we may need to download from a particular URL, luckily we know how to make an image with curl installed.</p>
+<p>we can add the following lines in the bottom of our dockerfile to download and extract the tool <code class="docutils literal notranslate"><span class="pre">salmon</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RUN</span> <span class="n">curl</span> <span class="o">-</span><span class="n">sSL</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">COMBINE</span><span class="o">-</span><span class="n">lab</span><span class="o">/</span><span class="n">salmon</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">v1</span><span class="mf">.5.2</span><span class="o">/</span><span class="n">salmon</span><span class="o">-</span><span class="mf">1.5.2</span><span class="n">_linux_x86_64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span> <span class="o">|</span> <span class="n">tar</span> <span class="n">xz</span> \
+<span class="o">&amp;&amp;</span> <span class="n">mv</span> <span class="o">/</span><span class="n">salmon</span><span class="o">-*/</span><span class="nb">bin</span><span class="o">/*</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span> \
+<span class="o">&amp;&amp;</span> <span class="n">mv</span> <span class="o">/</span><span class="n">salmon</span><span class="o">-*/</span><span class="n">lib</span><span class="o">/*</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>Exercise:</p>
+<ul class="simple">
+<li><p>Build an image with <code class="docutils literal notranslate"><span class="pre">salmon</span></code> installed. Do this by updating your <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> accordingly, and build it with the same command as before.</p></li>
+<li><p>Check that you have your new image available</p></li>
+</ul>
+<p>Solution:
+Update the <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> to have the following content:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>FROM debian:bullseye-slim
+
+LABEL image.author.name=&quot;Your Name Here&quot;
+LABEL image.author.email=&quot;your@email.here&quot;
+
+RUN apt-get update &amp;&amp; apt-get install -y curl
+
+ENV PATH=$PATH:/usr/games/
+
+RUN curl -sSL https://github.com/COMBINE-lab/salmon/releases/download/v1.5.2/salmon-1.5.2_linux_x86_64.tar.gz | tar xz \
+&amp;&amp; mv /salmon-*/bin/* /usr/bin/ \
+&amp;&amp; mv /salmon-*/lib/* /usr/lib/
+</pre></div>
+</div>
+<p>then run the command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">-</span><span class="n">t</span> <span class="n">my</span><span class="o">-</span><span class="n">image</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>finally confirm with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">images</span>
+</pre></div>
+</div>
 </section>
 
 

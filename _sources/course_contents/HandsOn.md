@@ -110,18 +110,51 @@ Exercise:
 
 
 
-
-
-Excercise:
-make your own dockerfile inspired by the one above and build it
-
-
-
-
 Say you have identified a container that you want to run with your scrip, but a key piece of software is missing.
 We can modify the container by adding some lines ot code to the Dockerfile which is used to generate the docker image used to spin up the docker container which we will use.
 
 
+Not all tools needed can be installed with `apt-get` and we may need to download from a particular URL, luckily we know how to make an image with curl installed.
 
+we can add the following lines in the bottom of our dockerfile to download and extract the tool `salmon`
+
+```
+RUN curl -sSL https://github.com/COMBINE-lab/salmon/releases/download/v1.5.2/salmon-1.5.2_linux_x86_64.tar.gz | tar xz \
+&& mv /salmon-*/bin/* /usr/bin/ \
+&& mv /salmon-*/lib/* /usr/lib/
+```
+
+Exercise:
+* Build an image with `salmon` installed. Do this by updating your `Dockerfile` accordingly, and build it with the same command as before.
+* Check that you have your new image available
+
+
+
+Solution:
+Update the `Dockerfile` to have the following content:
+```
+FROM debian:bullseye-slim
+
+LABEL image.author.name="Your Name Here"
+LABEL image.author.email="your@email.here"
+
+RUN apt-get update && apt-get install -y curl
+
+ENV PATH=$PATH:/usr/games/
+
+RUN curl -sSL https://github.com/COMBINE-lab/salmon/releases/download/v1.5.2/salmon-1.5.2_linux_x86_64.tar.gz | tar xz \
+&& mv /salmon-*/bin/* /usr/bin/ \
+&& mv /salmon-*/lib/* /usr/lib/
+```
+
+then run the command
+```
+docker build -t my-image .
+```
+
+finally confirm with 
+```
+docker images
+```
 
 
