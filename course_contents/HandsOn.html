@@ -366,6 +366,18 @@ As the container was found, it was donwloaded, and run.</p>
 <span class="n">docker</span> <span class="n">images</span>
 </pre></div>
 </div>
+<p>While we would rather reccomend using <em>virtual environments</em> for running speciffic environments interactively, it can be handy to be familiar with dockers ability to run a container in interactive mode.</p>
+<p>this is done by adding the two commandline inputs to the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> command <code class="docutils literal notranslate"><span class="pre">--interactive</span></code> and <code class="docutils literal notranslate"><span class="pre">--tty</span></code>  which have the equivalents <code class="docutils literal notranslate"><span class="pre">-i</span></code> and <code class="docutils literal notranslate"><span class="pre">-t</span></code>.
+They can thus be run with the following syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> <span class="o">&lt;</span><span class="n">container</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">command</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Excercise:</p>
+<p>launch the BASH shell (<code class="docutils literal notranslate"><span class="pre">bash</span></code>) in the publicly available <code class="docutils literal notranslate"><span class="pre">debian:bullseye-slim</span></code> container.</p>
+<p>Solution:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> <span class="n">debian</span><span class="p">:</span><span class="n">bullseye</span><span class="o">-</span><span class="n">slim</span> <span class="n">bash</span>
+</pre></div>
+</div>
 </section>
 
 
