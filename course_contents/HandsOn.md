@@ -157,4 +157,21 @@ finally confirm with
 docker images
 ```
 
+if you used the same name and tag you should notice that even if names are the same, images will have different ID.
+
+
+verifying that salmon is correctly installed can be done with the following command:
+
+```
+docker run <my-image> salmon --version
+```
+
+in case this fails, pleas try this alternative:
+```
+docker run nextflow/rnaseq-nf salmon --version
+```
+
+
+
+
 
