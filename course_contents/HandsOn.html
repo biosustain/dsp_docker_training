@@ -443,6 +443,15 @@ RUN curl -sSL https://github.com/COMBINE-lab/salmon/releases/download/v1.5.2/sal
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">images</span>
 </pre></div>
 </div>
+<p>if you used the same name and tag you should notice that even if names are the same, images will have different ID.</p>
+<p>verifying that salmon is correctly installed can be done with the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">&lt;</span><span class="n">my</span><span class="o">-</span><span class="n">image</span><span class="o">&gt;</span> <span class="n">salmon</span> <span class="o">--</span><span class="n">version</span>
+</pre></div>
+</div>
+<p>in case this fails, pleas try this alternative:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">nextflow</span><span class="o">/</span><span class="n">rnaseq</span><span class="o">-</span><span class="n">nf</span> <span class="n">salmon</span> <span class="o">--</span><span class="n">version</span>
+</pre></div>
+</div>
 </section>
 
 
