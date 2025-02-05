@@ -336,7 +336,36 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="docker-hands-on-beginners-training">
 <h1>Docker Hands-on beginners training<a class="headerlink" href="#docker-hands-on-beginners-training" title="Link to this heading">#</a></h1>
-<p>Inspired on Nextflow training: <a class="reference external" href="https://training.nextflow.io/basic_training/containers/" rel="noopener noreferrer" target="_blank">https://training.nextflow.io/basic_training/containers/</a></p>
+<p>Inspired by Nextflow training: <a class="reference external" href="https://training.nextflow.io/basic_training/containers/" rel="noopener noreferrer" target="_blank">https://training.nextflow.io/basic_training/containers/</a></p>
+<p>In this hands on, we assume you already have an environment with docker installed, either locally, or remotely in a place such as github codespaces which we have made ready for you in this occation.</p>
+<p>Once the docker daemon is running you can run containers, we will start with the <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> container, which is hosted on Docker Hub.</p>
+<p>In your command line, a docker container can be run with the following syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">&lt;</span><span class="n">container</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Excercise:</p>
+<p>Run the publicly available <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> container.</p>
+<p>Solution:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">hello</span><span class="o">-</span><span class="n">world</span>
+</pre></div>
+</div>
+<p>We notice that docker first tried to check if we had the container locally, as we did not, the online container repositories were checked.
+As the container was found, it was donwloaded, and run.</p>
+<p>We can also break down the step and only download an image without running it. This is done with the <code class="docutils literal notranslate"><span class="pre">pull</span></code> command using the following syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="o">&lt;</span><span class="n">container</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>To check which containers you have pulled, you can use <code class="docutils literal notranslate"><span class="pre">images</span></code> with the following syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">images</span>
+</pre></div>
+</div>
+<p>Excercise:</p>
+<p>Pull the publicly available <code class="docutils literal notranslate"><span class="pre">debian:bullseye-slim</span></code> container and verify it has been downloaded</p>
+<p>Solution:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">debian</span><span class="p">:</span><span class="n">bullseye</span><span class="o">-</span><span class="n">slim</span>
+<span class="n">docker</span> <span class="n">images</span>
+</pre></div>
+</div>
 </section>
 
 
