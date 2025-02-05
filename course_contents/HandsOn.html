@@ -378,6 +378,37 @@ They can thus be run with the following syntax:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> <span class="n">debian</span><span class="p">:</span><span class="n">bullseye</span><span class="o">-</span><span class="n">slim</span> <span class="n">bash</span>
 </pre></div>
 </div>
+<p>Making a docker image to spin it up as a docker container:
+Docker images are created from a textfile called <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>.
+A dockerfile can use an existing image, and build on top of it.</p>
+<p>For the most fundamental dockerfile, we will learn the keywords: <code class="docutils literal notranslate"><span class="pre">FROM</span></code>, <code class="docutils literal notranslate"><span class="pre">LABEL</span></code>, <code class="docutils literal notranslate"><span class="pre">RUN</span></code>, and <code class="docutils literal notranslate"><span class="pre">ENV</span></code></p>
+<p>Excercise:</p>
+<p>what do you think these four keywords indicate in the following <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>?</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>FROM debian:bullseye-slim
+
+LABEL image.author.name=&quot;Your Name Here&quot;
+LABEL image.author.email=&quot;your@email.here&quot;
+
+RUN apt-get update &amp;&amp; apt-get install -y curl
+
+ENV PATH=$PATH:/usr/games/
+</pre></div>
+</div>
+<p>When you have a dockerfile, you can build it to a docker image with the <code class="docutils literal notranslate"><span class="pre">build</span></code> command using the following syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">--</span><span class="n">tag</span> <span class="o">&lt;</span><span class="n">my</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">name</span><span class="p">:</span><span class="n">my</span><span class="o">-</span><span class="n">optional</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">tag</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">my</span><span class="o">-</span><span class="n">location</span><span class="o">-</span><span class="n">path</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>here <code class="docutils literal notranslate"><span class="pre">--tag</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">-t</span></code> and local location path can be referenced with <code class="docutils literal notranslate"><span class="pre">.</span></code></p>
+<p>Exercise:</p>
+<ul class="simple">
+<li><p>go ahead and make a dockerfile based on debian slim, with both <code class="docutils literal notranslate"><span class="pre">curl</span></code> and <code class="docutils literal notranslate"><span class="pre">cowsay</span></code> added.</p></li>
+<li><p>Build your docker file to an image</p></li>
+<li><p>run the command <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">&lt;my-image-name&gt;</span> <span class="pre">cowsay</span> <span class="pre">'Hej</span> <span class="pre">DTU!'</span></code></p></li>
+</ul>
+<p>Excercise:
+make your own dockerfile inspired by the one above and build it</p>
+<p>Say you have identified a container that you want to run with your scrip, but a key piece of software is missing.
+We can modify the container by adding some lines ot code to the Dockerfile which is used to generate the docker image used to spin up the docker container which we will use.</p>
 </section>
 
 

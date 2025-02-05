@@ -73,6 +73,55 @@ docker run -it debian:bullseye-slim bash
 ```
 
 
+Making a docker image to spin it up as a docker container:
+Docker images are created from a textfile called `Dockerfile`.
+A dockerfile can use an existing image, and build on top of it.
+
+For the most fundamental dockerfile, we will learn the keywords: `FROM`, `LABEL`, `RUN`, and `ENV`
+
+
+Excercise:
+
+what do you think these four keywords indicate in the following `Dockerfile`?
+```
+FROM debian:bullseye-slim
+
+LABEL image.author.name="Your Name Here"
+LABEL image.author.email="your@email.here"
+
+RUN apt-get update && apt-get install -y curl
+
+ENV PATH=$PATH:/usr/games/
+```
+
+
+When you have a dockerfile, you can build it to a docker image with the `build` command using the following syntax:
+
+```
+docker build --tag <my-image-name:my-optional-image-tag> <my-location-path>
+```
+here `--tag` is equivalent to `-t` and local location path can be referenced with `.`
+
+Exercise:
+* go ahead and make a dockerfile based on debian slim, with both `curl` and `cowsay` added.
+* Build your docker file to an image
+* run the command `docker run <my-image-name> cowsay 'Hej DTU!'`
+
+
+
+
+
+
+Excercise:
+make your own dockerfile inspired by the one above and build it
+
+
+
+
+Say you have identified a container that you want to run with your scrip, but a key piece of software is missing.
+We can modify the container by adding some lines ot code to the Dockerfile which is used to generate the docker image used to spin up the docker container which we will use.
+
+
 
 
 
