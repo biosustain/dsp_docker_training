@@ -187,7 +187,7 @@ For example, running the following command that is attempting to generate a geno
 
 ```
 docker run my-image \
-    salmon index -t $PWD/data/ggal/transcriptome.fa -i transcript-index
+    salmon index -t $PWD/course_content/data/ggal/transcriptome.fa -i transcript-index
 ```
 To mount a filesystem within a Docker container, you can use the `--volume` command-line option when running the container. Its argument consists of two fields separated by a colon (:):
 
@@ -196,7 +196,7 @@ Container target directory path
 For example:
 
 ```
-docker run --volume $PWD/data/ggal/transcriptome.fa:/transcriptome.fa my-image \
+docker run --volume $PWD/course_content/data/ggal/transcriptome.fa:/transcriptome.fa my-image \
     salmon index -t /transcriptome.fa -i transcript-index
 ```
 Warning
@@ -207,14 +207,14 @@ An easier way to mount file systems is to mount a parent directory to an identic
 
 ```
 docker run --volume $PWD:$PWD --workdir $PWD my-image \
-    salmon index -t $PWD/data/ggal/transcriptome.fa -i transcript-index
+    salmon index -t $PWD/course_content/data/ggal/transcriptome.fa -i transcript-index
 ```
 Or set a folder you want to mount as an environmental variable, called `DATA`:
 
 ```
-DATA=/workspace/gitpod/nf-training/data
+DATA=/dsp_docker_training/course_content/data
 docker run --volume $DATA:$DATA --workdir $PWD my-image \
-    salmon index -t $PWD/data/ggal/transcriptome.fa -i transcript-index
+    salmon index -t $PWD/course_content/data/ggal/transcriptome.fa -i transcript-index
 ```
 You can check the content of the transcript-index folder by entering the command:
 
