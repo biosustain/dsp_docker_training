@@ -103,7 +103,7 @@ We will now:
 * Check that you have your new image available
 
 
-Update the `Dockerfile` to also have the lines from above, replace `cowsay` with `salmon`
+Update the `Dockerfile` to also have the lines from above, remove the line with `ENTRYPOINT`
 
 and then run the command
 ```
