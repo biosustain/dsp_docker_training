@@ -6,29 +6,18 @@ In this hands on, we assume you already have an environment with docker installe
 
 Once the docker daemon is running you can run containers, we will start with the `hello-world` container, which is hosted on Docker Hub.
 
-In your command line, a docker container can be run with the following syntax: 
-```
-docker run <container-name>
-```
-
-Excercise:
-
-Run the publicly available `hello-world` container.
-
-Solution:
+In your command line, run the publicly available `hello-world` container:
 
 ```
 docker run hello-world
 ```
 
-
-
 We notice that docker first tried to check if we had the container locally, as we did not, the online container repositories were checked.
 As the container was found, it was donwloaded, and run.
 
-We can also break down the step and only download an image without running it. This is done with the `pull` command using the following syntax:
+Pull the publicly available `debian:bookworm-slim` container and verify it has been downloaded:
 ```
-docker pull <container-name>
+docker pull debian:bookworm-slim
 ```
 
 To check which containers you have pulled, you can use `images` with the following syntax:
@@ -37,41 +26,17 @@ docker images
 ```
 
 
-
-
-
-Excercise:
-
-Pull the publicly available `debian:bookworm-slim` container and verify it has been downloaded
-
-Solution:
-
-```
-docker pull debian:bookworm-slim
-docker images
-```
-
-
-
 While we would rather reccomend using _virtual environments_ for running speciffic environments interactively, it can be handy to be familiar with dockers ability to run a container in interactive mode.
 
 this is done by adding the two commandline inputs to the `docker run` command `--interactive` and `--tty`  which have the equivalents `-i` and `-t`. 
-They can thus be run with the following syntax:
+They can thus be run with the following syntax: `docker run -it <container-name> <command>`
 
-```
-docker run -it <container-name> <command>
-```
-
-Excercise:
-
-launch the BASH shell (`bash`) in the publicly available `debian:bookworm-slim` container.
-
-Solution:
+We will launch the BASH shell (`bash`) in the publicly available `debian:bookworm-slim` container:
 
 ```
 docker run -it debian:bookworm-slim bash
 ```
-
+and exit the container with `exit`.
 
 Making a docker image to spin it up as a docker container:
 Docker images are created from a textfile called `Dockerfile`.
@@ -79,40 +44,49 @@ A dockerfile can use an existing image, and build on top of it.
 
 For the most fundamental dockerfile, we will learn the keywords: `FROM`, `LABEL`, `RUN`, and `ENV`
 
-
-Excercise:
-
-what do you think these four keywords indicate in the following `Dockerfile`?
 ```
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 LABEL image.author.name="Your Name Here"
 LABEL image.author.email="your@email.here"
 
-RUN apt-get update && apt-get install -y curl
+RUN apt-get update && apt-get install -y curl cowsay
 
 ENV PATH=$PATH:/usr/games/
 ```
-
+_here the cowsay program is stored in games and we must add that directory to our PATH for the terminal to be able to find it._
 
 When you have a dockerfile, you can build it to a docker image with the `build` command using the following syntax:
+`docker build --tag <my-image-name:my-optional-image-tag> <my-location-path>` here `--tag` is equivalent to `-t` and local location path can be referenced with `.`
 
-```
-docker build --tag <my-image-name:my-optional-image-tag> <my-location-path>
-```
-here `--tag` is equivalent to `-t` and local location path can be referenced with `.`
-
-Exercise:
+We will now:
 * go ahead and make a dockerfile based on debian slim, with both `curl` and `cowsay` added.
 * Build your docker file to an image
 * run the command `docker run <my-image-name> cowsay 'Hej DTU!'`
 
+`code Dockerfile` opens a new file called Dockerfile in out editor, and we copy the content from above into this file and save it.
 
+we can then do 
+```
+docker build -t demo1 .
+```
 
+```
+docker run demo1 cowsay "Hej DTU"
+```
+Lets make our image for cowsay only by setting an ENTRYPOINT. add the line
+```
+ENTRYPOINT [ "cowsay" ]
+```
+and `docker build -t demo1 .` again
+
+now we run without specifying which program to use:
+```
+docker run demo1 "Hej DTU"
+```
 
 Say you have identified a container that you want to run with your scrip, but a key piece of software is missing.
 We can modify the container by adding some lines ot code to the Dockerfile which is used to generate the docker image used to spin up the docker container which we will use.
-
 
 Not all tools needed can be installed with `apt-get` and we may need to download from a particular URL, luckily we know how to make an image with curl installed.
 
@@ -124,32 +98,16 @@ RUN curl -sSL https://github.com/COMBINE-lab/salmon/releases/download/v1.5.2/sal
 && mv /salmon-*/lib/* /usr/lib/
 ```
 
-Exercise:
+We will now:
 * Build an image with `salmon` installed. Do this by updating your `Dockerfile` accordingly, and build it with the same command as before.
 * Check that you have your new image available
 
 
+Update the `Dockerfile` to also have the lines from above, replace `cowsay` with `salmon`
 
-Solution:
-Update the `Dockerfile` to have the following content:
+and then run the command
 ```
-FROM debian:bookworm-slim
-
-LABEL image.author.name="Your Name Here"
-LABEL image.author.email="your@email.here"
-
-RUN apt-get update && apt-get install -y curl
-
-ENV PATH=$PATH:/usr/games/
-
-RUN curl -sSL https://github.com/COMBINE-lab/salmon/releases/download/v1.5.2/salmon-1.5.2_linux_x86_64.tar.gz | tar xz \
-&& mv /salmon-*/bin/* /usr/bin/ \
-&& mv /salmon-*/lib/* /usr/lib/
-```
-
-then run the command
-```
-docker build -t my-image .
+docker build -t demo2 .
 ```
 
 finally confirm with 
@@ -159,11 +117,10 @@ docker images
 
 if you used the same name and tag you should notice that even if names are the same, images will have different ID.
 
-
 verifying that salmon is correctly installed can be done with the following command:
 
 ```
-docker run <my-image> salmon --version
+docker run demo2 salmon --version
 ```
 
 in case this fails, pleas try this alternative:
@@ -176,6 +133,13 @@ You can even launch a container in an interactive mode by using the following co
 docker run -it my-image bash
 ```
 Use the `exit` command to terminate the interactive session.
+
+We know our images are localy available. We also want to check if our containers are still existing.
+this is done by `docker ps -a` 
+
+When we do this we can see that they are still existing. There is no reason for this as these containers are supposed to just do one job based on the docker image.
+
+we can keep our space tidy by adding `--rm` to the run command to make sure the container is wiped after usage.
 
 
 
@@ -204,14 +168,14 @@ docker run --volume ./course_contents/data/ggal/transcriptome.fa:/transcriptome.
 to use current folder like this:
 
 ```
-docker run --volume $PWD:$PWD --workdir $PWD <image-name> salmon index -t $PWD/course_contents/data/ggal/transcriptome.fa -i transcript-index
+docker run --volume $PWD:$PWD --workdir $PWD demo2 salmon index -t $PWD/course_contents/data/ggal/transcriptome.fa -i transcript-index
 ```
 
 To keep everything more tidy, we can set a folder we want to mount as an environmental variable, called `DATA`:
 
 ```
 DATA=/workspaces/dsp_docker_training/course_contents/data/
-docker run --volume $DATA:$DATA --workdir $DATA <image-name> salmon index -t $DATA/ggal/transcriptome.fa -i transcript-index
+docker run --volume $DATA:$DATA --workdir $DATA demo2 salmon index -t $DATA/ggal/transcriptome.fa -i transcript-index
 ```
 
 You can check the content of the transcript-index folder by entering the command:
@@ -221,6 +185,16 @@ ls -la /workspaces/dsp_docker_training/course_contents/data/transcript-index
 ```
 
 Note that the permissions for files created by the Docker execution is root.
+
+We will now make two mounted volumes, a read-only for input, and a writable for output, `-v` is equivalent to `--volume`:
+
+```
+docker run -v $DATA:$DATA --workdir $DATA demo2 salmon index -t $DATA/ggal/transcriptome.fa -i transcript-index
+```
+
+
+
+
 
 Upload the container in the Docker Hub (optional)
 You can also publish your container in the Docker Hub to share it with other people.
