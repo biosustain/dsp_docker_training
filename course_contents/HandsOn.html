@@ -471,8 +471,9 @@ docker run --volume $DATA:$DATA --workdir $DATA demo2 salmon index -t $DATA/ggal
 </pre></div>
 </div>
 <p>Note that the permissions for files created by the Docker execution is root.</p>
-<p>We will now make two mounted volumes, a read-only for input, and a writable for output, <code class="docutils literal notranslate"><span class="pre">-v</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">--volume</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run -v $DATA:$DATA --workdir $DATA demo2 salmon index -t $DATA/ggal/transcriptome.fa -i transcript-index
+<p>We will now make two mounted volumes, a read-only for input, and a writable for output, <code class="docutils literal notranslate"><span class="pre">-v</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">--volume</span></code>.
+We can also add the entrypoint, and specify input and output parameters to match with what our command in salmon expects:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># docker run -v $DATA:$DATA -v  --workdir $DATA demo2 salmon index -t $DATA/ggal/transcriptome.fa -i transcript-index</span>
 </pre></div>
 </div>
 <p>Upload the container in the Docker Hub (optional)

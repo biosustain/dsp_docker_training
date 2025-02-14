@@ -186,10 +186,10 @@ ls -la /workspaces/dsp_docker_training/course_contents/data/transcript-index
 
 Note that the permissions for files created by the Docker execution is root.
 
-We will now make two mounted volumes, a read-only for input, and a writable for output, `-v` is equivalent to `--volume`:
-
+We will now make two mounted volumes, a read-only for input, and a writable for output, `-v` is equivalent to `--volume`.
+We can also add the entrypoint, and specify input and output parameters to match with what our command in salmon expects:
 ```
-docker run -v $DATA:$DATA --workdir $DATA demo2 salmon index -t $DATA/ggal/transcriptome.fa -i transcript-index
+# docker run -v $DATA:$DATA -v  --workdir $DATA demo2 salmon index -t $DATA/ggal/transcriptome.fa -i transcript-index
 ```
 
 
