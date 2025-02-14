@@ -472,6 +472,10 @@ For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">volume</span> <span class="o">./</span><span class="n">course_contents</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">ggal</span><span class="o">/</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">fa</span><span class="p">:</span><span class="o">/</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">fa</span> <span class="o">&lt;</span><span class="n">image</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span> <span class="n">head</span> <span class="o">/</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">fa</span>
 </pre></div>
 </div>
+<p>to use current folder like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run --volume $PWD:$PWD --workdir $PWD &lt;image-name&gt; salmon index -t $PWD/course_contents/data/ggal/transcriptome.fa -i transcript-index
+</pre></div>
+</div>
 <p>To keep everything more tidy, we can set a folder we want to mount as an environmental variable, called <code class="docutils literal notranslate"><span class="pre">DATA</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>DATA=/workspaces/dsp_docker_training/course_contents/data/
 docker run --volume $DATA:$DATA --workdir $DATA &lt;image-name&gt; salmon index -t $DATA/ggal/transcriptome.fa -i transcript-index

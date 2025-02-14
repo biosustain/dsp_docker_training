@@ -201,6 +201,11 @@ For example:
 ```
 docker run --volume ./course_contents/data/ggal/transcriptome.fa:/transcriptome.fa <image-name> head /transcriptome.fa
 ```
+to use current folder like this:
+
+```
+docker run --volume $PWD:$PWD --workdir $PWD <image-name> salmon index -t $PWD/course_contents/data/ggal/transcriptome.fa -i transcript-index
+```
 
 To keep everything more tidy, we can set a folder we want to mount as an environmental variable, called `DATA`:
 
