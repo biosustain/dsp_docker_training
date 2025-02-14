@@ -189,7 +189,7 @@ Note that the permissions for files created by the Docker execution is root.
 We will now make two mounted volumes, a read-only for input, and a writable for output, `-v` is equivalent to `--volume`.
 We can also add the entrypoint, and specify input and output parameters to match with what our command in salmon expects:
 ```
-# docker run -v $DATA:$DATA -v  --workdir $DATA demo2 salmon index -t $DATA/ggal/transcriptome.fa -i transcript-index
+docker run -v ./course_contents/data/ggal/transcriptome.fa:/transcriptome.fa:ro -v ./course_contents/result/:/result demo2 salmon index -t /transcriptome.fa -i /result/transcript-index
 ```
 
 
