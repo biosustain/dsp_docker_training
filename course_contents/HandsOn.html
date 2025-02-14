@@ -339,72 +339,68 @@
 <p>Inspired by Nextflow training: <a class="reference external" href="https://training.nextflow.io/basic_training/containers/" rel="noopener noreferrer" target="_blank">https://training.nextflow.io/basic_training/containers/</a></p>
 <p>In this hands on, we assume you already have an environment with docker installed, either locally, or remotely in a place such as github codespaces which we have made ready for you in this occation.</p>
 <p>Once the docker daemon is running you can run containers, we will start with the <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> container, which is hosted on Docker Hub.</p>
-<p>In your command line, a docker container can be run with the following syntax:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">&lt;</span><span class="n">container</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
-</pre></div>
-</div>
-<p>Excercise:</p>
-<p>Run the publicly available <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> container.</p>
-<p>Solution:</p>
+<p>In your command line, run the publicly available <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> container:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">hello</span><span class="o">-</span><span class="n">world</span>
 </pre></div>
 </div>
 <p>We notice that docker first tried to check if we had the container locally, as we did not, the online container repositories were checked.
 As the container was found, it was donwloaded, and run.</p>
-<p>We can also break down the step and only download an image without running it. This is done with the <code class="docutils literal notranslate"><span class="pre">pull</span></code> command using the following syntax:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="o">&lt;</span><span class="n">container</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+<p>Pull the publicly available <code class="docutils literal notranslate"><span class="pre">debian:bookworm-slim</span></code> container and verify it has been downloaded:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">debian</span><span class="p">:</span><span class="n">bookworm</span><span class="o">-</span><span class="n">slim</span>
 </pre></div>
 </div>
 <p>To check which containers you have pulled, you can use <code class="docutils literal notranslate"><span class="pre">images</span></code> with the following syntax:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">images</span>
 </pre></div>
 </div>
-<p>Excercise:</p>
-<p>Pull the publicly available <code class="docutils literal notranslate"><span class="pre">debian:bookworm-slim</span></code> container and verify it has been downloaded</p>
-<p>Solution:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">debian</span><span class="p">:</span><span class="n">bookworm</span><span class="o">-</span><span class="n">slim</span>
-<span class="n">docker</span> <span class="n">images</span>
-</pre></div>
-</div>
 <p>While we would rather reccomend using <em>virtual environments</em> for running speciffic environments interactively, it can be handy to be familiar with dockers ability to run a container in interactive mode.</p>
 <p>this is done by adding the two commandline inputs to the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> command <code class="docutils literal notranslate"><span class="pre">--interactive</span></code> and <code class="docutils literal notranslate"><span class="pre">--tty</span></code>  which have the equivalents <code class="docutils literal notranslate"><span class="pre">-i</span></code> and <code class="docutils literal notranslate"><span class="pre">-t</span></code>.
-They can thus be run with the following syntax:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> <span class="o">&lt;</span><span class="n">container</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">command</span><span class="o">&gt;</span>
-</pre></div>
-</div>
-<p>Excercise:</p>
-<p>launch the BASH shell (<code class="docutils literal notranslate"><span class="pre">bash</span></code>) in the publicly available <code class="docutils literal notranslate"><span class="pre">debian:bookworm-slim</span></code> container.</p>
-<p>Solution:</p>
+They can thus be run with the following syntax: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-it</span> <span class="pre">&lt;container-name&gt;</span> <span class="pre">&lt;command&gt;</span></code></p>
+<p>We will launch the BASH shell (<code class="docutils literal notranslate"><span class="pre">bash</span></code>) in the publicly available <code class="docutils literal notranslate"><span class="pre">debian:bookworm-slim</span></code> container:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> <span class="n">debian</span><span class="p">:</span><span class="n">bookworm</span><span class="o">-</span><span class="n">slim</span> <span class="n">bash</span>
 </pre></div>
 </div>
+<p>and exit the container with <code class="docutils literal notranslate"><span class="pre">exit</span></code>.</p>
 <p>Making a docker image to spin it up as a docker container:
 Docker images are created from a textfile called <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>.
 A dockerfile can use an existing image, and build on top of it.</p>
 <p>For the most fundamental dockerfile, we will learn the keywords: <code class="docutils literal notranslate"><span class="pre">FROM</span></code>, <code class="docutils literal notranslate"><span class="pre">LABEL</span></code>, <code class="docutils literal notranslate"><span class="pre">RUN</span></code>, and <code class="docutils literal notranslate"><span class="pre">ENV</span></code></p>
-<p>Excercise:</p>
-<p>what do you think these four keywords indicate in the following <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>?</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>FROM debian:bullseye-slim
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>FROM debian:bookworm-slim
 
 LABEL image.author.name=&quot;Your Name Here&quot;
 LABEL image.author.email=&quot;your@email.here&quot;
 
-RUN apt-get update &amp;&amp; apt-get install -y curl
+RUN apt-get update &amp;&amp; apt-get install -y curl cowsay
 
 ENV PATH=$PATH:/usr/games/
 </pre></div>
 </div>
-<p>When you have a dockerfile, you can build it to a docker image with the <code class="docutils literal notranslate"><span class="pre">build</span></code> command using the following syntax:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">--</span><span class="n">tag</span> <span class="o">&lt;</span><span class="n">my</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">name</span><span class="p">:</span><span class="n">my</span><span class="o">-</span><span class="n">optional</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">tag</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">my</span><span class="o">-</span><span class="n">location</span><span class="o">-</span><span class="n">path</span><span class="o">&gt;</span>
-</pre></div>
-</div>
-<p>here <code class="docutils literal notranslate"><span class="pre">--tag</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">-t</span></code> and local location path can be referenced with <code class="docutils literal notranslate"><span class="pre">.</span></code></p>
-<p>Exercise:</p>
+<p><em>here the cowsay program is stored in games and we must add that directory to our PATH for the terminal to be able to find it.</em></p>
+<p>When you have a dockerfile, you can build it to a docker image with the <code class="docutils literal notranslate"><span class="pre">build</span></code> command using the following syntax:
+<code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">build</span> <span class="pre">--tag</span> <span class="pre">&lt;my-image-name:my-optional-image-tag&gt;</span> <span class="pre">&lt;my-location-path&gt;</span></code> here <code class="docutils literal notranslate"><span class="pre">--tag</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">-t</span></code> and local location path can be referenced with <code class="docutils literal notranslate"><span class="pre">.</span></code></p>
+<p>We will now:</p>
 <ul class="simple">
 <li><p>go ahead and make a dockerfile based on debian slim, with both <code class="docutils literal notranslate"><span class="pre">curl</span></code> and <code class="docutils literal notranslate"><span class="pre">cowsay</span></code> added.</p></li>
 <li><p>Build your docker file to an image</p></li>
 <li><p>run the command <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">&lt;my-image-name&gt;</span> <span class="pre">cowsay</span> <span class="pre">'Hej</span> <span class="pre">DTU!'</span></code></p></li>
 </ul>
+<p><code class="docutils literal notranslate"><span class="pre">code</span> <span class="pre">Dockerfile</span></code> opens a new file called Dockerfile in out editor, and we copy the content from above into this file and save it.</p>
+<p>we can then do</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">-</span><span class="n">t</span> <span class="n">demo1</span> <span class="o">.</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">demo1</span> <span class="n">cowsay</span> <span class="s2">&quot;Hej DTU&quot;</span>
+</pre></div>
+</div>
+<p>Lets make our image for cowsay only by setting an ENTRYPOINT. add the line</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ENTRYPOINT</span> <span class="p">[</span> <span class="s2">&quot;cowsay&quot;</span> <span class="p">]</span>
+</pre></div>
+</div>
+<p>and <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">build</span> <span class="pre">-t</span> <span class="pre">demo1</span> <span class="pre">.</span></code> again</p>
+<p>now we run without specifying which program to use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">demo1</span> <span class="s2">&quot;Hej DTU&quot;</span>
+</pre></div>
+</div>
 <p>Say you have identified a container that you want to run with your scrip, but a key piece of software is missing.
 We can modify the container by adding some lines ot code to the Dockerfile which is used to generate the docker image used to spin up the docker container which we will use.</p>
 <p>Not all tools needed can be installed with <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> and we may need to download from a particular URL, luckily we know how to make an image with curl installed.</p>
@@ -414,29 +410,14 @@ We can modify the container by adding some lines ot code to the Dockerfile which
 <span class="o">&amp;&amp;</span> <span class="n">mv</span> <span class="o">/</span><span class="n">salmon</span><span class="o">-*/</span><span class="n">lib</span><span class="o">/*</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span>
 </pre></div>
 </div>
-<p>Exercise:</p>
+<p>We will now:</p>
 <ul class="simple">
 <li><p>Build an image with <code class="docutils literal notranslate"><span class="pre">salmon</span></code> installed. Do this by updating your <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> accordingly, and build it with the same command as before.</p></li>
 <li><p>Check that you have your new image available</p></li>
 </ul>
-<p>Solution:
-Update the <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> to have the following content:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>FROM debian:bookworm-slim
-
-LABEL image.author.name=&quot;Your Name Here&quot;
-LABEL image.author.email=&quot;your@email.here&quot;
-
-RUN apt-get update &amp;&amp; apt-get install -y curl
-
-ENV PATH=$PATH:/usr/games/
-
-RUN curl -sSL https://github.com/COMBINE-lab/salmon/releases/download/v1.5.2/salmon-1.5.2_linux_x86_64.tar.gz | tar xz \
-&amp;&amp; mv /salmon-*/bin/* /usr/bin/ \
-&amp;&amp; mv /salmon-*/lib/* /usr/lib/
-</pre></div>
-</div>
-<p>then run the command</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">-</span><span class="n">t</span> <span class="n">my</span><span class="o">-</span><span class="n">image</span> <span class="o">.</span>
+<p>Update the <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> to also have the lines from above, replace <code class="docutils literal notranslate"><span class="pre">cowsay</span></code> with <code class="docutils literal notranslate"><span class="pre">salmon</span></code></p>
+<p>and then run the command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">-</span><span class="n">t</span> <span class="n">demo2</span> <span class="o">.</span>
 </pre></div>
 </div>
 <p>finally confirm with</p>
@@ -445,7 +426,7 @@ RUN curl -sSL https://github.com/COMBINE-lab/salmon/releases/download/v1.5.2/sal
 </div>
 <p>if you used the same name and tag you should notice that even if names are the same, images will have different ID.</p>
 <p>verifying that salmon is correctly installed can be done with the following command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">&lt;</span><span class="n">my</span><span class="o">-</span><span class="n">image</span><span class="o">&gt;</span> <span class="n">salmon</span> <span class="o">--</span><span class="n">version</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">demo2</span> <span class="n">salmon</span> <span class="o">--</span><span class="n">version</span>
 </pre></div>
 </div>
 <p>in case this fails, pleas try this alternative:</p>
@@ -457,6 +438,10 @@ RUN curl -sSL https://github.com/COMBINE-lab/salmon/releases/download/v1.5.2/sal
 </pre></div>
 </div>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">exit</span></code> command to terminate the interactive session.</p>
+<p>We know our images are localy available. We also want to check if our containers are still existing.
+this is done by <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">ps</span> <span class="pre">-a</span></code></p>
+<p>When we do this we can see that they are still existing. There is no reason for this as these containers are supposed to just do one job based on the docker image.</p>
+<p>we can keep our space tidy by adding <code class="docutils literal notranslate"><span class="pre">--rm</span></code> to the run command to make sure the container is wiped after usage.</p>
 <p>File system mounts:
 Containers run in a completely separate file system and it cannot access the hosting file system by default.</p>
 <p>We can use the <code class="docutils literal notranslate"><span class="pre">--volume</span> <span class="pre">&lt;host-directrory&gt;:&lt;container-directory&gt;</span></code> syntax to make a file or a folder available inside our container</p>
@@ -473,12 +458,12 @@ For example:</p>
 </pre></div>
 </div>
 <p>to use current folder like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run --volume $PWD:$PWD --workdir $PWD &lt;image-name&gt; salmon index -t $PWD/course_contents/data/ggal/transcriptome.fa -i transcript-index
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run --volume $PWD:$PWD --workdir $PWD demo2 salmon index -t $PWD/course_contents/data/ggal/transcriptome.fa -i transcript-index
 </pre></div>
 </div>
 <p>To keep everything more tidy, we can set a folder we want to mount as an environmental variable, called <code class="docutils literal notranslate"><span class="pre">DATA</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>DATA=/workspaces/dsp_docker_training/course_contents/data/
-docker run --volume $DATA:$DATA --workdir $DATA &lt;image-name&gt; salmon index -t $DATA/ggal/transcriptome.fa -i transcript-index
+docker run --volume $DATA:$DATA --workdir $DATA demo2 salmon index -t $DATA/ggal/transcriptome.fa -i transcript-index
 </pre></div>
 </div>
 <p>You can check the content of the transcript-index folder by entering the command:</p>
@@ -486,6 +471,10 @@ docker run --volume $DATA:$DATA --workdir $DATA &lt;image-name&gt; salmon index 
 </pre></div>
 </div>
 <p>Note that the permissions for files created by the Docker execution is root.</p>
+<p>We will now make two mounted volumes, a read-only for input, and a writable for output, <code class="docutils literal notranslate"><span class="pre">-v</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">--volume</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run -v $DATA:$DATA --workdir $DATA demo2 salmon index -t $DATA/ggal/transcriptome.fa -i transcript-index
+</pre></div>
+</div>
 <p>Upload the container in the Docker Hub (optional)
 You can also publish your container in the Docker Hub to share it with other people.</p>
 <p>Create an account on the https://hub.docker.com website. Then from your shell terminal run the following command, entering the user name and password you specified when registering in the Hub:</p>
