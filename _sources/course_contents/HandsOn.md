@@ -42,12 +42,12 @@ docker images
 
 Excercise:
 
-Pull the publicly available `debian:bullseye-slim` container and verify it has been downloaded
+Pull the publicly available `debian:bookworm-slim` container and verify it has been downloaded
 
 Solution:
 
 ```
-docker pull debian:bullseye-slim
+docker pull debian:bookworm-slim
 docker images
 ```
 
@@ -133,7 +133,7 @@ Exercise:
 Solution:
 Update the `Dockerfile` to have the following content:
 ```
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 LABEL image.author.name="Your Name Here"
 LABEL image.author.email="your@email.here"

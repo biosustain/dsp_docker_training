@@ -360,9 +360,9 @@ As the container was found, it was donwloaded, and run.</p>
 </pre></div>
 </div>
 <p>Excercise:</p>
-<p>Pull the publicly available <code class="docutils literal notranslate"><span class="pre">debian:bullseye-slim</span></code> container and verify it has been downloaded</p>
+<p>Pull the publicly available <code class="docutils literal notranslate"><span class="pre">debian:bookworm-slim</span></code> container and verify it has been downloaded</p>
 <p>Solution:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">debian</span><span class="p">:</span><span class="n">bullseye</span><span class="o">-</span><span class="n">slim</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">debian</span><span class="p">:</span><span class="n">bookworm</span><span class="o">-</span><span class="n">slim</span>
 <span class="n">docker</span> <span class="n">images</span>
 </pre></div>
 </div>
@@ -421,7 +421,7 @@ We can modify the container by adding some lines ot code to the Dockerfile which
 </ul>
 <p>Solution:
 Update the <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> to have the following content:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>FROM debian:bullseye-slim
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>FROM debian:bookworm-slim
 
 LABEL image.author.name=&quot;Your Name Here&quot;
 LABEL image.author.email=&quot;your@email.here&quot;
