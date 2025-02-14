@@ -64,12 +64,12 @@ docker run -it <container-name> <command>
 
 Excercise:
 
-launch the BASH shell (`bash`) in the publicly available `debian:bullseye-slim` container.
+launch the BASH shell (`bash`) in the publicly available `debian:bookworm-slim` container.
 
 Solution:
 
 ```
-docker run -it debian:bullseye-slim bash
+docker run -it debian:bookworm-slim bash
 ```
 
 
