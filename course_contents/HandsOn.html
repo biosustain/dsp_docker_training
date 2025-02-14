@@ -459,34 +459,26 @@ RUN curl -sSL https://github.com/COMBINE-lab/salmon/releases/download/v1.5.2/sal
 <p>Use the <code class="docutils literal notranslate"><span class="pre">exit</span></code> command to terminate the interactive session.</p>
 <p>File system mounts:
 Containers run in a completely separate file system and it cannot access the hosting file system by default.</p>
-<p>For example, running the following command that is attempting to generate a genome index using the Salmon tool will fail because Salmon cannot access the input file:</p>
+<p>We can use the <code class="docutils literal notranslate"><span class="pre">--volume</span> <span class="pre">&lt;host-directrory&gt;:&lt;container-directory&gt;</span></code> syntax to make a file or a folder available inside our container</p>
+<p>Without linking directories like this, we dont have access to outside files, inside the container. I.e. running the following command that is attempting to generate a genome index using the Salmon tool will fail because Salmon cannot access the input file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run my-image \
     salmon index -t $PWD/course_content/data/ggal/transcriptome.fa -i transcript-index
 </pre></div>
 </div>
-<p>To mount a filesystem within a Docker container, you can use the <code class="docutils literal notranslate"><span class="pre">--volume</span></code> command-line option when running the container. Its argument consists of two fields separated by a colon (:):</p>
+<p>To mount a filesystem within a Docker container, you can use the <code class="docutils literal notranslate"><span class="pre">--volume</span></code> command-line option when running the container. Its argument consists of two fields separated by a colon (<code class="docutils literal notranslate"><span class="pre">:</span></code>):</p>
 <p>Host source directory path
 Container target directory path
 For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run --volume $PWD/course_content/data/ggal/transcriptome.fa:/transcriptome.fa my-image \
-    salmon index -t /transcriptome.fa -i transcript-index
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">volume</span> <span class="o">./</span><span class="n">course_contents</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">ggal</span><span class="o">/</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">fa</span><span class="p">:</span><span class="o">/</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">fa</span> <span class="o">&lt;</span><span class="n">image</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span> <span class="n">head</span> <span class="o">/</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">fa</span>
 </pre></div>
 </div>
-<p>Warning</p>
-<p>The generated transcript-index directory is still not accessible in the host file system.</p>
-<p>An easier way to mount file systems is to mount a parent directory to an identical directory in the container. This allows you to use the same path when running it in the container. For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run --volume $PWD:$PWD --workdir $PWD my-image \
-    salmon index -t $PWD/course_content/data/ggal/transcriptome.fa -i transcript-index
-</pre></div>
-</div>
-<p>Or set a folder you want to mount as an environmental variable, called <code class="docutils literal notranslate"><span class="pre">DATA</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>DATA=/dsp_docker_training/course_content/data
-docker run --volume $DATA:$DATA --workdir $PWD my-image \
-    salmon index -t $PWD/course_content/data/ggal/transcriptome.fa -i transcript-index
+<p>To keep everything more tidy, we can set a folder we want to mount as an environmental variable, called <code class="docutils literal notranslate"><span class="pre">DATA</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>DATA=/workspaces/dsp_docker_training/course_contents/data/
+docker run --volume $DATA:$DATA --workdir $DATA &lt;image-name&gt; salmon index -t $DATA/ggal/transcriptome.fa -i transcript-index
 </pre></div>
 </div>
 <p>You can check the content of the transcript-index folder by entering the command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">-</span><span class="n">la</span> <span class="n">transcript</span><span class="o">-</span><span class="n">index</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">-</span><span class="n">la</span> <span class="o">/</span><span class="n">workspaces</span><span class="o">/</span><span class="n">dsp_docker_training</span><span class="o">/</span><span class="n">course_contents</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">transcript</span><span class="o">-</span><span class="n">index</span>
 </pre></div>
 </div>
 <p>Note that the permissions for files created by the Docker execution is root.</p>

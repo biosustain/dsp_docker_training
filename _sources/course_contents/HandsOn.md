@@ -183,43 +183,36 @@ Use the `exit` command to terminate the interactive session.
 File system mounts:
 Containers run in a completely separate file system and it cannot access the hosting file system by default.
 
-For example, running the following command that is attempting to generate a genome index using the Salmon tool will fail because Salmon cannot access the input file:
+We can use the `--volume <host-directrory>:<container-directory>` syntax to make a file or a folder available inside our container 
+
+Without linking directories like this, we dont have access to outside files, inside the container. I.e. running the following command that is attempting to generate a genome index using the Salmon tool will fail because Salmon cannot access the input file:
 
 ```
 docker run my-image \
     salmon index -t $PWD/course_content/data/ggal/transcriptome.fa -i transcript-index
 ```
-To mount a filesystem within a Docker container, you can use the `--volume` command-line option when running the container. Its argument consists of two fields separated by a colon (:):
+
+To mount a filesystem within a Docker container, you can use the `--volume` command-line option when running the container. Its argument consists of two fields separated by a colon (`:`):
 
 Host source directory path
 Container target directory path
 For example:
 
 ```
-docker run --volume $PWD/course_content/data/ggal/transcriptome.fa:/transcriptome.fa my-image \
-    salmon index -t /transcriptome.fa -i transcript-index
+docker run --volume ./course_contents/data/ggal/transcriptome.fa:/transcriptome.fa <image-name> head /transcriptome.fa
 ```
-Warning
 
-The generated transcript-index directory is still not accessible in the host file system.
-
-An easier way to mount file systems is to mount a parent directory to an identical directory in the container. This allows you to use the same path when running it in the container. For example:
+To keep everything more tidy, we can set a folder we want to mount as an environmental variable, called `DATA`:
 
 ```
-docker run --volume $PWD:$PWD --workdir $PWD my-image \
-    salmon index -t $PWD/course_content/data/ggal/transcriptome.fa -i transcript-index
+DATA=/workspaces/dsp_docker_training/course_contents/data/
+docker run --volume $DATA:$DATA --workdir $DATA <image-name> salmon index -t $DATA/ggal/transcriptome.fa -i transcript-index
 ```
-Or set a folder you want to mount as an environmental variable, called `DATA`:
 
-```
-DATA=/dsp_docker_training/course_content/data
-docker run --volume $DATA:$DATA --workdir $PWD my-image \
-    salmon index -t $PWD/course_content/data/ggal/transcriptome.fa -i transcript-index
-```
 You can check the content of the transcript-index folder by entering the command:
 
 ```
-ls -la transcript-index
+ls -la /workspaces/dsp_docker_training/course_contents/data/transcript-index
 ```
 
 Note that the permissions for files created by the Docker execution is root.
