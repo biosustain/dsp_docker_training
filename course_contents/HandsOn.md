@@ -198,6 +198,10 @@ docker run --rm -v ./course_contents/data/ggal/transcriptome.fa:/transcriptome.f
 ```
 
 ## Upload the container in the Docker Hub (optional)
+
+While you can follow this guide, it is reccomended that you also look into any instructions there may be where you chose to host your images.
+
+
 You can also publish your container in the Docker Hub to share it with other people.
 
 Create an account on the https://hub.docker.com website. Then from your shell terminal run the following command, entering the user name and password you specified when registering in the Hub:
