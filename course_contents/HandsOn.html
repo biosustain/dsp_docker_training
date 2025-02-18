@@ -393,8 +393,7 @@
 <p>A dockerfile can use an existing image, and build on top of it.</p>
 <p>For the most fundamental dockerfile, we will learn the keywords: <code class="docutils literal notranslate"><span class="pre">FROM</span></code>, <code class="docutils literal notranslate"><span class="pre">LABEL</span></code>, <code class="docutils literal notranslate"><span class="pre">RUN</span></code>, and <code class="docutils literal notranslate"><span class="pre">ENV</span></code></p>
 <p>Let’s make a dockerfile based on <code class="docutils literal notranslate"><span class="pre">debian:bookworm-slim</span></code>, with both <code class="docutils literal notranslate"><span class="pre">curl</span></code> and <code class="docutils literal notranslate"><span class="pre">cowsay</span></code> added. <code class="docutils literal notranslate"><span class="pre">code</span> <span class="pre">Dockerfile</span></code> opens a new file called Dockerfile in out editor, and you can copy the followin content and save it:</p>
-<div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">Dockerfile</span><a class="headerlink" href="#id1" title="Link to this code">#</a></div>
+<p>Content of the file <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>:</p>
 <div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">debian:bookworm-slim</span>
 
 <span class="k">LABEL</span><span class="w"> </span>image.author.name<span class="o">=</span><span class="s2">&quot;Your Name Here&quot;</span>
@@ -404,7 +403,6 @@
 
 <span class="k">ENV</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/games/
 </pre></div>
-</div>
 </div>
 <p><em>here the cowsay program is stored in games and we must add that directory to our PATH for the terminal to be able to find it.</em></p>
 <p>When you have a Dockerfile, you can build it to a docker image with the <code class="docutils literal notranslate"><span class="pre">build</span></code> command using the following syntax:
