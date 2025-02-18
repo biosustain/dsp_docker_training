@@ -58,7 +58,7 @@ For the most fundamental dockerfile, we will learn the keywords: `FROM`, `LABEL`
 
 Let's make a dockerfile based on `debian:bookworm-slim`, with both `curl` and `cowsay` added. `code Dockerfile` opens a new file called Dockerfile in out editor, and you can copy the followin content and save it:
 
-```{code-block} docker
+```{code} docker
 :filename: Dockerfile
 
 FROM debian:bookworm-slim
