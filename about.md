@@ -1,10 +1,5 @@
 # About
 
-> More information about your (your team) and your work.
-
-Some text about you here.
-# About
-
 ## The course 
 
 ## Objectives
@@ -17,7 +12,7 @@ In this course you will learn:
  
 - Run, pull or login interactively in your container.
  
-- Creating your first Dockerfile and adding some software (rnaseq realeted).
+- Creating your first Dockerfile and adding some software (rnaseq related).
  
 - File system mounts.
  
