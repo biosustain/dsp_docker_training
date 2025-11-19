@@ -30,6 +30,7 @@ course_information/Timing.md
 
 course_contents/DockerIntro.md
 course_contents/HandsOn.md
+course_contents/HandsOn_20251126.md
 ```
 
 ```{toctree}
