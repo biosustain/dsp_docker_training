@@ -1,7 +1,12 @@
-# Timing
+# Agenda
 
-This is the agenda for the Data Club on the 19th February 2025
+Day: 26th November 2025
 
-10:00-11:30 : Introduction + Hands-on + Q&A
-
-11:30-12:00: Lunch + Networking (in the class or we will move to the building 208 hall)
+Agenda:
+| Time        | Activity
+|-------------|-------------------------
+| 10:00-10:10 | Welcome + Coffee + Croissants
+| 10:10-11:40 | Introduction to Docker
+| 11:40-12:10 | Lunch break
+| 12:10-13:40 | Building a Dockerfile
+| 13:40-14:00 | Q&A - Bring your own questions about Docker

@@ -1,4 +1,4 @@
-# Docker Introduction (Data Club 19th February 2025)
+# Docker Introduction
 
 What if reviewer number 2 tells you that it is impossible to reproduce your results? Oops! Figuring out all software versions and dependencies in your system and in the reviewer's system and compare them sounds like very tedious work! Wouldn't it be nice to send him/her your pipeline as a Docker image, with the needed software preinstalled and all the dependencies in place?
  
@@ -10,7 +10,7 @@ Docker improves bioinformatics workflows by ensuring reproducibility and portabi
 
 - What is Docker and why is it needed
 - How to install it - Requirements, best practices
-- Creating your first Dockerfile and adding some software (rnaseq realeted)
+- Creating your first Dockerfile and adding some software (rnaseq related)
 - File system mounts
 - Build Docker images and interact with containers
 - Share your Docker images (registries, Docker Hub)
