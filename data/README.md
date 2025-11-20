@@ -11,17 +11,17 @@ Files were downloaded and modified as detailed in above GitHub issue.
 ## Original files (downloaded from ftp)
 
 # Genome sequence fasta 
-GCF_000005845.2_ASM584v2_genomic.fna
+[GCF_000005845.2_ASM584v2_genomic.fna](GCF_000005845.2_ASM584v2_genomic.fna)
 
 # Genome annotation gtf (line count: 18024)
-GCF_000005845.2_ASM584v2_genomic.gtf
+[GCF_000005845.2_ASM584v2_genomic.gtf](GCF_000005845.2_ASM584v2_genomic.gtf)
 
 
 ## Modified files
 
 # Modified gtf (all empty transcript fields removed -> line count: 13385)
-GCF_000005845.2_ASM584v2_genomic_modified.gtf
+[GCF_000005845.2_ASM584v2_genomic_modified.gtf](GCF_000005845.2_ASM584v2_genomic_modified.gtf)
 
 # Self-generated transcript fasta and genome index (both are outputs from gffread)
-GCF_000005845.2_ASM584v2_modified_transcript.fna
-GCF_000005845.2_ASM584v2_genomic.fna.fai
+[GCF_000005845.2_ASM584v2_modified_transcript.fna](GCF_000005845.2_ASM584v2_modified_transcript.fna)
+[GCF_000005845.2_ASM584v2_genomic.fna.fai](GCF_000005845.2_ASM584v2_genomic.fna.fai)
