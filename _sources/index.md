@@ -26,6 +26,14 @@ course_information/Timing.md
 ```{toctree}
 :maxdepth: 2
 :hidden:
+:caption: data
+
+data/README.md
+```
+
+```{toctree}
+:maxdepth: 2
+:hidden:
 :caption: Course contents
 
 course_contents/DockerIntro.md
