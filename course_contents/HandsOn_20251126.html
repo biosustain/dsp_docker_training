@@ -327,7 +327,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -343,6 +345,18 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-considerations">Initial considerations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-and-biological-context">Data and biological context</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-container">Running a container</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pulling-a-container">Pulling a container</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-our-dockerfile">Writing our Dockerfile</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -362,6 +376,100 @@ document.write(`
 <li><p>mounting the data</p></li>
 <li><p>docker run -v data_to_moount script.sh</p></li>
 </ol>
+<section id="initial-considerations">
+<h2>Initial considerations<a class="headerlink" href="#initial-considerations" title="Link to this heading">#</a></h2>
+<p>In this course, you can work on your laptop if you have installed the Docker in your machine. For local installation:</p>
+<ul class="simple">
+<li><p>Mac: <a class="reference external" href="https://docs.docker.com/desktop/setup/install/mac-install/" rel="noreferrer" target="_blank">https://docs.docker.com/desktop/setup/install/mac-install/</a></p></li>
+<li><p>Linux: <a class="reference external" href="https://docs.docker.com/engine/install/" rel="noreferrer" target="_blank">https://docs.docker.com/engine/install/</a></p></li>
+<li><p>Windows: <a class="reference external" href="https://docs.docker.com/desktop/setup/install/windows-install/" rel="noreferrer" target="_blank">https://docs.docker.com/desktop/setup/install/windows-install/</a></p></li>
+</ul>
+<p>Alternatively use Github Codespaces to avoid any system incompatibility. You can open directly a GitHub codespace for this specific repository here: <a class="reference external" href="https://codespaces.new/biosustain/dsp_docker_training" rel="noreferrer" target="_blank"><img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg" /></a></p>
+</section>
+<section id="data-and-biological-context">
+<h2>Data and biological context<a class="headerlink" href="#data-and-biological-context" title="Link to this heading">#</a></h2>
+<p>Link to Sebastian slides</p>
+</section>
+<section id="running-a-container">
+<h2>Running a container<a class="headerlink" href="#running-a-container" title="Link to this heading">#</a></h2>
+<p>Once the docker daemon is running you can run containers, we will start with the <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> container, which is hosted on <a class="reference external" href="https://hub.docker.com/" rel="noreferrer" target="_blank">Docker Hub</a>.</p>
+<p>In your command line, run the publicly available <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> container:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">hello</span><span class="o">-</span><span class="n">world</span>
+</pre></div>
+</div>
+<p>We usually run that to check that our installation is working correctly. If you read <code class="docutils literal notranslate"><span class="pre">'Hello</span> <span class="pre">from</span> <span class="pre">Docker!'</span></code> everything is fine for now.</p>
+<p>Please read the information given. Docker first tried to check if we had the container locally, as we did not, the online container repositories were checked. As the container was found, it was donwloaded, and run.</p>
+</section>
+<section id="pulling-a-container">
+<h2>Pulling a container<a class="headerlink" href="#pulling-a-container" title="Link to this heading">#</a></h2>
+<p>Pull the publicly available <code class="docutils literal notranslate"><span class="pre">debian:bookworm-slim</span></code> container and verify it has been downloaded:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">debian</span><span class="p">:</span><span class="n">bookworm</span><span class="o">-</span><span class="n">slim</span>
+</pre></div>
+</div>
+<p>To check which containers you have pulled, you can use <code class="docutils literal notranslate"><span class="pre">images</span></code> command with the following syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">images</span>
+</pre></div>
+</div>
+</section>
+<section id="writing-our-dockerfile">
+<h2>Writing our Dockerfile<a class="headerlink" href="#writing-our-dockerfile" title="Link to this heading">#</a></h2>
+<p>What do we need?</p>
+<ul class="simple">
+<li><p>OS system</p></li>
+<li><p>Working directory</p></li>
+<li><p>Instructions to download and install software and place it on the executables path</p>
+<ul>
+<li><p>bowtie2: align reads to a reference</p></li>
+<li><p>feature counts: count transcripts</p></li>
+<li><p>samtools: deal with .bam files</p></li>
+</ul>
+</li>
+<li><p>copy an script example</p></li>
+</ul>
+<p>Open a file called Dockerfile</p>
+<p>Which OS system we want to use</p>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.13</span>
+</pre></div>
+</div>
+<p>Which OS system we want to use</p>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.13</span>
+</pre></div>
+</div>
+<p>Creating Working directory</p>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+</pre></div>
+</div>
+<p>Updating the downloader manager <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> and installing the software that can be found in apt-get (easier solution). IN this case bowtie2 (the aligner) and samtools (to deal with a bam file):</p>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span>bowtie2<span class="w"> </span>samtools
+</pre></div>
+</div>
+<p>Installing feature counts. This process is a bit more involved. See here, we need to:</p>
+<ul class="simple">
+<li><p>download it</p></li>
+<li><p>change the name as it downloads with a weird name</p></li>
+<li><p>uncompress it</p></li>
+<li><p>specify in which path there is the executable</p></li>
+</ul>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="c"># Download feature counts (package called subread)</span>
+<span class="k">ADD</span><span class="w"> </span>https://sourceforge.net/projects/subread/files/subread-2.0.8/subread-2.0.8-Linux-x86_64.tar.gz/download<span class="w"> </span>./
+
+<span class="c"># Change name (why?)</span>
+<span class="k">RUN</span><span class="w"> </span>mv<span class="w"> </span>download<span class="w"> </span>subread-2.0.8-Linux-x86_64.tar.gz
+
+<span class="c"># Uncompress</span>
+<span class="k">RUN</span><span class="w"> </span>tar<span class="w"> </span>-xzf<span class="w"> </span>subread-2.0.8-Linux-x86_64.tar.gz<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>rm<span class="w"> </span>subread-2.0.8-Linux-x86_64.tar.gz
+
+<span class="c"># Specify the path to the executable</span>
+<span class="k">ENV</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">:/app/STAR_2.7.11b/Linux_x86_64_static:/app/subread-2.0.8-Linux-x86_64/bin/&quot;</span>
+</pre></div>
+</div>
+<p>FInally we add an example script to run the container.</p>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">COPY</span><span class="w"> </span>scripts/<span class="w"> </span>./scripts/
+</pre></div>
+</div>
+<p>Add Dockerfile reference for the instructions of each of the commands. Add the link!</p>
+</section>
 </section>
 
 
@@ -399,6 +507,25 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-considerations">Initial considerations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-and-biological-context">Data and biological context</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-container">Running a container</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pulling-a-container">Pulling a container</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-our-dockerfile">Writing our Dockerfile</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
