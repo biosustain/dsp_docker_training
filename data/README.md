@@ -20,8 +20,8 @@ Files were downloaded and modified as detailed in above GitHub issue.
 ## Modified files
 
 ### Modified gtf (all empty transcript fields removed -> line count: 13385)
-[data/GCF_000005845.2_ASM584v2_genomic_modified.gtf](GCF_000005845.2_ASM584v2_genomic_modified.gtf)
+GCF_000005845.2_ASM584v2_genomic_modified.gtf
 
 ### Self-generated transcript fasta and genome index (both are outputs from gffread)
-[data/GCF_000005845.2_ASM584v2_modified_transcript.fna](GCF_000005845.2_ASM584v2_modified_transcript.fna)
-[data/GCF_000005845.2_ASM584v2_genomic.fna.fai](GCF_000005845.2_ASM584v2_genomic.fna.fai)
+GCF_000005845.2_ASM584v2_modified_transcript.fna
+GCF_000005845.2_ASM584v2_genomic.fna.fai
