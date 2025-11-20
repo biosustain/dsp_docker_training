@@ -3,7 +3,7 @@
 Author: Sebastian Schulz
 Date: 23 March 2025
 
-Please see this GitHub issue for details on original input files and procedures to modify them: https://github.com/nf-core/rnaseq/issues/1512.
+Please see this GitHub issue for details on original input files and procedures to modify them: <https://github.com/nf-core/rnaseq/issues/1512>.
 
 Files were downloaded and modified as detailed in above GitHub issue.
 
