@@ -44,14 +44,6 @@ data/README.md
 ```{toctree}
 :maxdepth: 2
 :hidden:
-:caption: scripts
-
-scripts/align_and_count_prok.sh
-```
-
-```{toctree}
-:maxdepth: 2
-:hidden:
 
 resources
 ```
