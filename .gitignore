@@ -1,2 +1,6 @@
 _build
 *.docx
+
+# folders to ignore
+results/
+data/bowtie*
