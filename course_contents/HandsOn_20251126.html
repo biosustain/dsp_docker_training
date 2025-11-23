@@ -355,6 +355,8 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-container">Running a container</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pulling-a-container">Pulling a container</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-our-dockerfile">Writing our Dockerfile</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-an-container-in-interactive-mode">Running an container in interactive mode</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-image-mounting-the-data">Running the image mounting the data</a></li>
 </ul>
             </nav>
         </div>
@@ -443,7 +445,8 @@ document.write(`
 <div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span>bowtie2<span class="w"> </span>samtools
 </pre></div>
 </div>
-<p>Installing feature counts. This process is a bit more involved. See here, we need to:</p>
+<p>Not all tools needed can be installed with <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> and we may need to download from a particular URL as in the case of feature counts.
+This process is a bit more involved. See here, we need to:</p>
 <ul class="simple">
 <li><p>download it</p></li>
 <li><p>change the name as it downloads with a weird name</p></li>
@@ -464,8 +467,31 @@ document.write(`
 <span class="k">ENV</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">:/app/STAR_2.7.11b/Linux_x86_64_static:/app/subread-2.0.8-Linux-x86_64/bin/&quot;</span>
 </pre></div>
 </div>
-<p>FInally we add an example script to run the container.</p>
+<p>Finally we add an example script to run the container.</p>
 <div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">COPY</span><span class="w"> </span>scripts/<span class="w"> </span>./scripts/
+</pre></div>
+</div>
+<p>When you have a Dockerfile, you can build it to a docker image with the <code class="docutils literal notranslate"><span class="pre">build</span></code> command using the following syntax:
+<code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">build</span> <span class="pre">--tag</span> <span class="pre">&lt;my-image-name:my-optional-image-tag&gt;</span> <span class="pre">&lt;my-location-path&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">--tag</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">-t</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;my-location-path&gt;</span></code> can be referenced with <code class="docutils literal notranslate"><span class="pre">.</span></code></p>
+<p>Let’s build your docker file to an image:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>align_count<span class="w"> </span>-f<span class="w"> </span>docker_file/Dockerfile<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+<section id="running-an-container-in-interactive-mode">
+<h2>Running an container in interactive mode<a class="headerlink" href="#running-an-container-in-interactive-mode" title="Link to this heading">#</a></h2>
+<p>While we would rather reccomend using <em>virtual environments</em> for running speciffic environments interactively, it can be handy to be familiar with docker’s ability to run a container in interactive mode. This is just useful to check if the expected software is present within a container, but we do not recommend to change anything in the container, instead do it in the Dockerfile.</p>
+<p>This is done by adding the two command line inputs to the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> command: <code class="docutils literal notranslate"><span class="pre">--interactive</span></code> and <code class="docutils literal notranslate"><span class="pre">--tty</span></code>,  which have the equivalents <code class="docutils literal notranslate"><span class="pre">-i</span></code> and <code class="docutils literal notranslate"><span class="pre">-t</span></code>.</p>
+<p>They can thus be run with the following syntax: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-it</span> <span class="pre">&lt;container-name&gt;</span> <span class="pre">&lt;command&gt;</span></code></p>
+<p>We will launch the BASH shell (<code class="docutils literal notranslate"><span class="pre">bash</span></code>) in the <code class="docutils literal notranslate"><span class="pre">align_count</span></code> image:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>align_count<span class="w"> </span>bash
+</pre></div>
+</div>
+</section>
+<section id="running-the-image-mounting-the-data">
+<h2>Running the image mounting the data<a class="headerlink" href="#running-the-image-mounting-the-data" title="Link to this heading">#</a></h2>
+<p>mount path must be absolute.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span>./data/:/app/data<span class="w"> </span>-v<span class="w"> </span>./results/:/app/results<span class="w"> </span>align_count<span class="w"> </span>./scripts/align_and_count_prok.sh
 </pre></div>
 </div>
 <p>Add Dockerfile reference for the instructions of each of the commands. Add the link!</p>
@@ -522,6 +548,8 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-container">Running a container</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pulling-a-container">Pulling a container</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-our-dockerfile">Writing our Dockerfile</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-an-container-in-interactive-mode">Running an container in interactive mode</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-image-mounting-the-data">Running the image mounting the data</a></li>
 </ul>
   </nav></div>
 
