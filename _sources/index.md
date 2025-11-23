@@ -26,19 +26,19 @@ course_information/Timing.md
 ```{toctree}
 :maxdepth: 2
 :hidden:
-:caption: data
-
-data/README.md
-```
-
-```{toctree}
-:maxdepth: 2
-:hidden:
 :caption: Course contents
 
 course_contents/DockerIntro.md
 course_contents/HandsOn.md
 course_contents/HandsOn_20251126.md
+```
+
+```{toctree}
+:maxdepth: 2
+:hidden:
+:caption: data
+
+data/README.md
 ```
 
 ```{toctree}
