@@ -6,7 +6,7 @@
 # We will run this script inside a docker container built with the Dockerfile in docker_file/Dockerfile
 
 # Define directories and parameters
-GENOME_DIR="/app/data/bowtie2_index"      # Directory with bowtie2 genome index
+GENOME_DIR="/app/bowtie2_index"      # Directory with bowtie2 genome index
 GTF_FILE="/app/data/GCF_000005845.2_ASM584v2_genomic.gtf"       # GTF annotation file
 GENOME_FASTA="/app/data/GCF_000005845.2_ASM584v2_genomic.fna"     # Genome fasta file for index generation
 READ1="/app/data/SRR9681150_1_sub_50k.fastq.gz"           # Forward reads
