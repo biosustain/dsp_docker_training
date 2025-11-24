@@ -359,6 +359,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-an-container-in-interactive-mode">Running an container in interactive mode</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-system-mounts">File system mounts</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-image-mounting-the-data">Running the image mounting the data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-the-results">Interpreting the results</a></li>
 </ul>
             </nav>
         </div>
@@ -416,20 +417,20 @@ document.write(`
 Go to <a class="reference external" href="https://docs.docker.com/reference/dockerfile/" rel="noreferrer" target="_blank">Dockerfile references</a> and find out what are these instructions for.</p>
 <p>What do we need to add to our Dockerfile?</p>
 <ul class="simple">
-<li><p>OS system</p></li>
+<li><p>Base image</p></li>
 <li><p>Working directory</p></li>
 <li><p>Instructions to download and install software and place it on the executables path</p>
 <ul>
 <li><p>bowtie2: align reads to a reference</p></li>
-<li><p>feature counts: count transcripts</p></li>
-<li><p>samtools: deal with .bam files</p></li>
+<li><p>feature counts: count reads</p></li>
+<li><p>samtools: deal with .bam files (sort and index them)</p></li>
 </ul>
 </li>
 <li><p>copy an script example</p></li>
 </ul>
 <p>Open a file called Dockerfile. <code class="docutils literal notranslate"><span class="pre">code</span> <span class="pre">Dockerfile</span></code></p>
-<p>First let’s specify which OS system we want to use. We are going to use the official Python Docker image, the 3.13 default variant is based on Debian slim.</p>
-<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.13</span>
+<p>First let’s specify which base image we want to use. We are going to use one of the latest Debian versions as base image:</p>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">debian:13</span>
 </pre></div>
 </div>
 <p>Define the working directory</p>
@@ -438,21 +439,21 @@ Go to <a class="reference external" href="https://docs.docker.com/reference/dock
 </div>
 <p>Next, we are going to update the downloader manager <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> and installing the software that we need and can be found in apt-get (easier solution). In our case we need bowtie2 (the aligner) and samtools (sort and index bam files).
 We need to use <code class="docutils literal notranslate"><span class="pre">RUN</span></code> to execute building commands.</p>
-<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span>bowtie2<span class="w"> </span>samtools
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>bowtie2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>curl<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>samtools
 </pre></div>
 </div>
 <p>However, not all tools needed can be installed with <code class="docutils literal notranslate"><span class="pre">apt-get</span></code>, for example in our case we need to download feature counts from a particular URL. This process is a bit more involved. We need to:</p>
 <ul class="simple">
-<li><p>download it</p></li>
-<li><p>change the name as it downloads with a weird name</p></li>
+<li><p>download it using curl</p></li>
 <li><p>uncompress it</p></li>
+<li><p>removing the executable</p></li>
 <li><p>specify in which path there is the executable</p></li>
 </ul>
 <div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="c"># Download feature counts (package called subread)</span>
-<span class="k">ADD</span><span class="w"> </span>https://sourceforge.net/projects/subread/files/subread-2.0.8/subread-2.0.8-Linux-x86_64.tar.gz/download<span class="w"> </span>./
-
-<span class="c"># Change name (why?)</span>
-<span class="k">RUN</span><span class="w"> </span>mv<span class="w"> </span>download<span class="w"> </span>subread-2.0.8-Linux-x86_64.tar.gz
+<span class="k">RUN</span><span class="w"> </span>curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>subread-2.0.8-Linux-x86_64.tar.gz<span class="w"> </span>https://sourceforge.net/projects/subread/files/subread-2.0.8/subread-2.0.8-Linux-x86_64.tar.gz/download
 
 <span class="c"># Uncompress</span>
 <span class="k">RUN</span><span class="w"> </span>tar<span class="w"> </span>-xzf<span class="w"> </span>subread-2.0.8-Linux-x86_64.tar.gz<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
@@ -461,7 +462,7 @@ We need to use <code class="docutils literal notranslate"><span class="pre">RUN<
 </div>
 <p>Specify the path to the feature counts executable</p>
 <div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="c"># Specify the path to the executable</span>
-<span class="k">ENV</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">:/app/STAR_2.7.11b/Linux_x86_64_static:/app/subread-2.0.8-Linux-x86_64/bin/&quot;</span>
+<span class="k">ENV</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">:/app/subread-2.0.8-Linux-x86_64/bin/&quot;</span>
 </pre></div>
 </div>
 <p>Finally we are going to copy to the image the scripts folder that contains the script that we are going to run.</p>
@@ -500,7 +501,7 @@ docker<span class="w"> </span>run<span class="w"> </span>align_count<span class=
 <section id="file-system-mounts">
 <h2>File system mounts<a class="headerlink" href="#file-system-mounts" title="Link to this heading">#</a></h2>
 <p>Containers run in a completely separate file system and it cannot access the hosting file system by default.</p>
-<p>We can use the <code class="docutils literal notranslate"><span class="pre">--volume</span> <span class="pre">&lt;host-directrory&gt;:&lt;container-directory&gt;</span></code> syntax to make a file or a folder available inside our container. <code class="docutils literal notranslate"><span class="pre">-v</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">--volume</span></code>. Its argument consists of two fields separated by a colon (<code class="docutils literal notranslate"><span class="pre">:</span></code>):</p>
+<p>We can use the <code class="docutils literal notranslate"><span class="pre">--volume</span> <span class="pre">&lt;host-directory&gt;:&lt;container-directory&gt;</span></code> syntax to make a file or a folder available inside our container. <code class="docutils literal notranslate"><span class="pre">-v</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">--volume</span></code>. Its argument consists of two fields separated by a colon (<code class="docutils literal notranslate"><span class="pre">:</span></code>):</p>
 <ul class="simple">
 <li><p>Host source directory path</p></li>
 <li><p>Container target directory path</p></li>
@@ -514,6 +515,10 @@ docker<span class="w"> </span>run<span class="w"> </span>align_count<span class=
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span>./data/:/app/data:ro<span class="w"> </span>-v<span class="w"> </span>./results/:/app/results<span class="w"> </span>align_count<span class="w"> </span>./scripts/align_and_count_prok.sh
 </pre></div>
 </div>
+</section>
+<section id="interpreting-the-results">
+<h2>Interpreting the results<a class="headerlink" href="#interpreting-the-results" title="Link to this heading">#</a></h2>
+<p>Results have been copied back from the container to my local results folder (host). Let’s have a look.</p>
 </section>
 </section>
 
@@ -571,6 +576,7 @@ docker<span class="w"> </span>run<span class="w"> </span>align_count<span class=
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-an-container-in-interactive-mode">Running an container in interactive mode</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-system-mounts">File system mounts</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-image-mounting-the-data">Running the image mounting the data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-the-results">Interpreting the results</a></li>
 </ul>
   </nav></div>
 
