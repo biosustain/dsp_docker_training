@@ -4,3 +4,6 @@ _build
 # folders to ignore
 results/
 data/bowtie*
+
+# merge message
+MERGE_MSGO
