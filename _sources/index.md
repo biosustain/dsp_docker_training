@@ -44,6 +44,14 @@ data/README.md
 ```{toctree}
 :maxdepth: 2
 :hidden:
+:caption: scripts
+
+scripts/align_and_count_shell_script.md
+```
+
+```{toctree}
+:maxdepth: 2
+:hidden:
 
 resources
 ```

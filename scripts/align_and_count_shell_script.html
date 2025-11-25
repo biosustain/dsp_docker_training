@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Instructions &#8212; Data Club Feb 2025: Docker Introduction  documentation</title>
+    <title>Shell script used to align and count reads &#8212; Data Club Feb 2025: Docker Introduction  documentation</title>
   
   
   
@@ -41,13 +41,13 @@
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'course_information/Instructions';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'scripts/align_and_count_shell_script';</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Location" href="Location.html" />
-    <link rel="prev" title="About" href="../about.html" />
+    <link rel="next" title="Resources" href="../resources.html" />
+    <link rel="prev" title="Files description" href="../data/README.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -170,10 +170,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Instructions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Location.html">Location</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Timing.html">Agenda</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../course_information/Instructions.html">Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../course_information/Location.html">Location</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../course_information/Timing.html">Agenda</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course contents</span></p>
 <ul class="nav bd-sidenav">
@@ -186,8 +186,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../data/README.html">Files description</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">scripts</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../scripts/align_and_count_shell_script.html">Shell script used to align and count reads</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Shell script used to align and count reads</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../resources.html">Resources</a></li>
@@ -260,7 +260,7 @@
       
       
       
-      <li><a href="../_sources/course_information/Instructions.md" target="_blank"
+      <li><a href="../_sources/scripts/align_and_count_shell_script.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -331,9 +331,7 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</button>
+
 </div></div>
       
     </div>
@@ -344,22 +342,11 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Instructions</h1>
+    <h1>Shell script used to align and count reads</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#opening-the-github-codespace-to-have-an-environment-to-work-with-the-docker">Opening the Github codespace to have an environment to work with the Docker</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#docker">Docker</a></li>
-</ul>
-</li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -369,24 +356,57 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="instructions">
-<h1>Instructions<a class="headerlink" href="#instructions" title="Link to this heading">#</a></h1>
-<section id="opening-the-github-codespace-to-have-an-environment-to-work-with-the-docker">
-<h2>Opening the Github codespace to have an environment to work with the Docker<a class="headerlink" href="#opening-the-github-codespace-to-have-an-environment-to-work-with-the-docker" title="Link to this heading">#</a></h2>
-<p>To avoid installation and configuration issues we are going to deploy an environment for you containing VS Code and Docker.</p>
-<p>If you want to open directly a GitHub codespace for this specific repository click here: <a class="reference external" href="https://codespaces.new/biosustain/dsp_docker_training" rel="noreferrer" target="_blank"><img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg" /></a></p>
-<p>Don’t change the configuration and accept the default option. It says pay but you’re not paying…</p>
-<p>If you want to do it manually go to <a class="reference external" href="https://github.com/biosustain/dsp_docker_training" rel="noreferrer" target="_blank">course website</a></p>
-<p>Click on button <strong>Code</strong> and click on the Codespaces tab. There click on <strong>Create codespace</strong>. Now your Nextflow environment will be built following the instructions in devcontainer.json file (i.e. installing Ubuntu, Docker, VSCode with Docker extension) with additional customization added in the Dockerfile (i.e, installing Docker dependencies).</p>
-<p>To learn more about Github codespaces go <a class="reference external" href="https://github.com/features/codespaces" rel="noreferrer" target="_blank">here</a></p>
-<blockquote>
-<div><p>Please remember to delete your Codespace by the end of the class so that you do not consume your free Github codespace credits! If you do not delete it it will be deleted automatically days after your created.</p>
-</div></blockquote>
-<section id="docker">
-<h3>Docker<a class="headerlink" href="#docker" title="Link to this heading">#</a></h3>
-<p>Please to install Docker follow this <a class="reference external" href="https://docs.docker.com/get-started/get-docker/" rel="noreferrer" target="_blank">link</a> and download the version that matches you OS.</p>
-</section>
-</section>
+  <section class="tex2jax_ignore mathjax_ignore" id="shell-script-used-to-align-and-count-reads">
+<h1>Shell script used to align and count reads<a class="headerlink" href="#shell-script-used-to-align-and-count-reads" title="Link to this heading">#</a></h1>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1"># Author: Juliana Assis - nf-core-hackathon 2025</span>
+<span class="c1"># Adapted by Albert Palleja for the Docker course - 2025-11-26</span>
+
+<span class="c1"># In this script we want to align the reads from a subsampled Escherichia coli sample to E. coli K-12 genome </span>
+<span class="c1"># and count the reads aligned per gene.</span>
+<span class="c1"># For this purpose we are going to use bowtie2 for the alignment and featureCounts for the read counting</span>
+<span class="c1"># We will run this script inside a docker container built with the Dockerfile in docker_file/Dockerfile</span>
+
+<span class="c1"># Define directories and parameters</span>
+<span class="nv">GENOME_DIR</span><span class="o">=</span><span class="s2">&quot;/app/bowtie2_index&quot;</span><span class="w">      </span><span class="c1"># Directory with bowtie2 genome index</span>
+<span class="nv">GTF_FILE</span><span class="o">=</span><span class="s2">&quot;/app/data/GCF_000005845.2_ASM584v2_genomic.gtf&quot;</span><span class="w">       </span><span class="c1"># GTF annotation file</span>
+<span class="nv">GENOME_FASTA</span><span class="o">=</span><span class="s2">&quot;/app/data/GCF_000005845.2_ASM584v2_genomic.fna&quot;</span><span class="w">     </span><span class="c1"># Genome fasta file for index generation</span>
+<span class="nv">READ1</span><span class="o">=</span><span class="s2">&quot;/app/data/SRR9681150_1_sub_50k.fastq.gz&quot;</span><span class="w">           </span><span class="c1"># Forward reads</span>
+<span class="nv">READ2</span><span class="o">=</span><span class="s2">&quot;/app/data/SRR9681150_2_sub_50k.fastq.gz&quot;</span><span class="w">           </span><span class="c1"># Reverse reads</span>
+<span class="nv">RESULTS</span><span class="o">=</span><span class="s2">&quot;/app/results&quot;</span><span class="w">                </span><span class="c1"># Output directory</span>
+<span class="nv">THREADS</span><span class="o">=</span><span class="m">4</span><span class="w">	</span><span class="c1"># Number of cpus to use</span>
+
+<span class="c1"># Create index directory if it doesn&#39;t exist</span>
+mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$GENOME_DIR</span>
+mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$RESULTS</span>
+
+<span class="c1"># Step 1: Generate bowtie index (only required once)</span>
+bowtie2-build<span class="w"> </span><span class="nv">$GENOME_FASTA</span><span class="w"> </span><span class="nv">$GENOME_DIR</span>
+<span class="w">	</span>
+<span class="c1"># Step 2: Run bowtie2 alignment and sort the output BAM file</span>
+bowtie2<span class="w"> </span>-x<span class="w"> </span><span class="nv">$GENOME_DIR</span><span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>-1<span class="w"> </span><span class="nv">$READ1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>-2<span class="w"> </span><span class="nv">$READ2</span><span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>--no-unal<span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>--no-mixed<span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>--no-discordant<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>samtools<span class="w"> </span>view<span class="w"> </span>-b<span class="w"> </span>-F<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>samtools<span class="w"> </span>sort<span class="w"> </span>-o<span class="w"> </span>/app/results/aligned_sorted.bam
+
+<span class="c1"># Step 3: Index the sorted BAM file: enables fast random access to specific regions of the data</span>
+samtools<span class="w"> </span>index<span class="w"> </span>/app/results/aligned_sorted.bam<span class="w"> </span><span class="c1">#Change or make a folder</span>
+
+<span class="c1"># Step 4: Run featureCounts to count reads per gene</span>
+featureCounts<span class="w"> </span>-T<span class="w"> </span><span class="nv">$THREADS</span><span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>-p<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-a<span class="w"> </span><span class="nv">$GTF_FILE</span><span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>-o<span class="w"> </span><span class="s2">&quot;/app/results/gene_counts.txt&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-t<span class="w"> </span>CDS<span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>-g<span class="w"> </span>gene_id<span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>--countReadPairs<span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>/app/results/aligned_sorted.bam
+</pre></div>
+</div>
 </section>
 
 
@@ -401,20 +421,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../about.html"
+       href="../data/README.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">About</p>
+        <p class="prev-next-title">Files description</p>
       </div>
     </a>
     <a class="right-next"
-       href="Location.html"
+       href="../resources.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Location</p>
+        <p class="prev-next-title">Resources</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -424,24 +444,6 @@ document.write(`
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#opening-the-github-codespace-to-have-an-environment-to-work-with-the-docker">Opening the Github codespace to have an environment to work with the Docker</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#docker">Docker</a></li>
-</ul>
-</li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>
