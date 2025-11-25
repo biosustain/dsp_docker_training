@@ -11,8 +11,8 @@ Another repository of docker images:
 
 ## Install instructions and best practices
 
-- How to install: https://docs.docker.com/engine/install/
-- Building images: https://docs.docker.com/build/building/best-practices/
+- How to install: <https://docs.docker.com/engine/install/>
+- Building images: <https://docs.docker.com/build/building/best-practices/>
   - Choose the right base image
   - Rebuild your images often
   - Exclude with .dockerignore
@@ -20,7 +20,7 @@ Another repository of docker images:
   - Don't install unnecessary packages
   - Sort multi-line arguments
   - Dockerfile instructions
-    - Reference: https://docs.docker.com/reference/dockerfile/
-- Code samples: https://docs.docker.com/reference/samples/
-- Compose: https://docs.docker.com/compose/how-tos/environment-variables/best-practices/
-- WSL: https://docs.docker.com/desktop/features/wsl/best-practices/
+    - Reference: <https://docs.docker.com/reference/dockerfile/>
+- Code samples: <https://docs.docker.com/reference/samples/>
+- Compose: <https://docs.docker.com/compose/how-tos/environment-variables/best-practices/>
+- WSL: <https://docs.docker.com/desktop/features/wsl/best-practices/>
