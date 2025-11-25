@@ -381,6 +381,10 @@ document.write(`
 <li><p>Linux: <a class="reference external" href="https://docs.docker.com/engine/install/" rel="noreferrer" target="_blank">https://docs.docker.com/engine/install/</a></p></li>
 <li><p>Windows: <a class="reference external" href="https://docs.docker.com/desktop/setup/install/windows-install/" rel="noreferrer" target="_blank">https://docs.docker.com/desktop/setup/install/windows-install/</a></p></li>
 </ul>
+<p>Clone the repository that contain the data, script and all the course information</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">biosustain</span><span class="o">/</span><span class="n">dsp_docker_training</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
 <p>Alternatively use Github Codespaces to avoid any system incompatibility. You can open directly a GitHub codespace for this specific repository here: <a class="reference external" href="https://codespaces.new/biosustain/dsp_docker_training" rel="noreferrer" target="_blank"><img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg" /></a></p>
 </section>
 <section id="data-and-biological-context">
@@ -399,11 +403,11 @@ document.write(`
 </section>
 <section id="pulling-a-container">
 <h2>Pulling a container<a class="headerlink" href="#pulling-a-container" title="Link to this heading">#</a></h2>
-<p>Pull the publicly available <code class="docutils literal notranslate"><span class="pre">debian:bookworm-slim</span></code> container and verify it has been downloaded:</p>
+<p>Pull the publicly available <code class="docutils literal notranslate"><span class="pre">debian:bookworm-slim</span></code> container and verify it has been downloaded. Images are pulled by default from Docker hub.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">debian</span><span class="p">:</span><span class="n">bookworm</span><span class="o">-</span><span class="n">slim</span>
 </pre></div>
 </div>
-<p>To check which containers you have pulled, you can use <code class="docutils literal notranslate"><span class="pre">images</span></code> command with the following syntax:</p>
+<p>To check which images you have pulled, you can use <code class="docutils literal notranslate"><span class="pre">images</span></code> command with the following syntax:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">images</span>
 </pre></div>
 </div>
@@ -412,15 +416,16 @@ document.write(`
 <h2>Writing our Dockerfile<a class="headerlink" href="#writing-our-dockerfile" title="Link to this heading">#</a></h2>
 <p>Docker images are created from a textfile called <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>.</p>
 <p>This text file contains list of commands to assemble and configure the image with the software required.</p>
-<p>A dockerfile can use an existing image, and build on top of it.</p>
 <p>For our dockerfile, we will learn the following instructions: <code class="docutils literal notranslate"><span class="pre">FROM</span></code>, <code class="docutils literal notranslate"><span class="pre">LABEL</span></code>, <code class="docutils literal notranslate"><span class="pre">WORKDIR</span></code>, <code class="docutils literal notranslate"><span class="pre">RUN</span></code>, <code class="docutils literal notranslate"><span class="pre">COPY</span></code> and <code class="docutils literal notranslate"><span class="pre">ENV</span></code>
 Go to <a class="reference external" href="https://docs.docker.com/reference/dockerfile/" rel="noreferrer" target="_blank">Dockerfile references</a> and find out what are these instructions for.</p>
+<p>First thing we need is a base image. A dockerfile can use an existing image, and build on top of it. A base image is an image you designate in a <code class="docutils literal notranslate"><span class="pre">FROM</span></code> directive in a Dockerfile. A Dockerfile with the <code class="docutils literal notranslate"><span class="pre">FROM</span> <span class="pre">scratch</span></code> directive uses an empty base image. When we build the Docker image from <code class="docutils literal notranslate"><span class="pre">debian:13</span></code> we will get an image with something really close to haveing installed debian distribution (version 13).</p>
 <p>What do we need to add to our Dockerfile?</p>
 <ul class="simple">
 <li><p>Base image</p></li>
 <li><p>Working directory</p></li>
 <li><p>Instructions to download and install software and place it on the executables path</p>
 <ul>
+<li><p>curl to download feature counts</p></li>
 <li><p>bowtie2: align reads to a reference</p></li>
 <li><p>feature counts: count reads</p></li>
 <li><p>samtools: deal with .bam files (sort and index them)</p></li>
@@ -437,7 +442,7 @@ Go to <a class="reference external" href="https://docs.docker.com/reference/dock
 <div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
 </pre></div>
 </div>
-<p>Next, we are going to update the downloader manager <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> and installing the software that we need and can be found in apt-get (easier solution). In our case we need bowtie2 (the aligner) and samtools (sort and index bam files).
+<p>Next, we are going to update the downloader manager <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> and installing the software that we need and can be found in apt-get (easier solution). In our case we need curl (downloading feature counts), bowtie2 (the aligner) and samtools (sort and index bam files).
 We need to use <code class="docutils literal notranslate"><span class="pre">RUN</span></code> to execute building commands.</p>
 <div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>bowtie2<span class="w"> </span><span class="se">\</span>
@@ -455,7 +460,7 @@ We need to use <code class="docutils literal notranslate"><span class="pre">RUN<
 <div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="c"># Download feature counts (package called subread)</span>
 <span class="k">RUN</span><span class="w"> </span>curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>subread-2.0.8-Linux-x86_64.tar.gz<span class="w"> </span>https://sourceforge.net/projects/subread/files/subread-2.0.8/subread-2.0.8-Linux-x86_64.tar.gz/download
 
-<span class="c"># Uncompress</span>
+<span class="c"># Uncompress and remove the executable</span>
 <span class="k">RUN</span><span class="w"> </span>tar<span class="w"> </span>-xzf<span class="w"> </span>subread-2.0.8-Linux-x86_64.tar.gz<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>rm<span class="w"> </span>subread-2.0.8-Linux-x86_64.tar.gz
 </pre></div>
