@@ -1,3 +1,5 @@
+# Shell script used to align and count reads
+```{code-block} bash
 #!/bin/bash
 # Author: Juliana Assis - nf-core-hackathon 2025
 # Adapted by Albert Palleja for the Docker course - 2025-11-26
@@ -45,3 +47,4 @@ featureCounts -T $THREADS \
 	-g gene_id \
 	--countReadPairs \
 	/app/results/aligned_sorted.bam
+```
