@@ -395,11 +395,17 @@ document.write(`
 </section>
 <section id="running-a-container">
 <h2>Running a container<a class="headerlink" href="#running-a-container" title="Link to this heading">#</a></h2>
-<p>Once the docker daemon is running you can run containers, we will start with the <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> container, which is hosted on <a class="reference external" href="https://hub.docker.com/" rel="noreferrer" target="_blank">Docker Hub</a>.</p>
+<p>First of all, if you installed Docker Desktop on your machine check that Docker Desktop is open and shows “Running” in the status bar.</p>
+<p>You can also test with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="o">-</span><span class="n">v</span>
+<span class="n">docker</span> <span class="n">info</span>
+</pre></div>
+</div>
+<p>Once the docker daemon is running you can create and run a new container from an image, we will start with the <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> image, which is hosted on <a class="reference external" href="https://hub.docker.com/" rel="noreferrer" target="_blank">Docker Hub</a>.</p>
 <blockquote>
 <div><p>Docker Hub is Docker’s public registry service where we can &gt;store, share, and manage container images. It hosts Docker &gt;Official Images (like hello-world), Verified Publisher content, &gt;and community-contributed images.</p>
 </div></blockquote>
-<p>In your command line, run the publicly available <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> container:</p>
+<p>In your command line, run the publicly available <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> image:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">hello</span><span class="o">-</span><span class="n">world</span>
 </pre></div>
 </div>
@@ -408,10 +414,14 @@ document.write(`
 </section>
 <section id="pulling-a-container">
 <h2>Pulling a container<a class="headerlink" href="#pulling-a-container" title="Link to this heading">#</a></h2>
-<p>Pull the publicly available <code class="docutils literal notranslate"><span class="pre">debian:bookworm-slim</span></code> container and verify it has been downloaded. Images are pulled by default from Docker hub.</p>
+<p>Pull the publicly available debian image: <code class="docutils literal notranslate"><span class="pre">debian:bookworm-slim</span></code> and verify it has been downloaded. Images are pulled by default from Docker hub.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">debian</span><span class="p">:</span><span class="n">bookworm</span><span class="o">-</span><span class="n">slim</span>
 </pre></div>
 </div>
+<blockquote>
+<div><p>“Bookworm” is the codename for Debian 12, the current stable release of the Debian Linux distribution.
+“slim” variant is a stripped-down, minimal version of the base image.</p>
+</div></blockquote>
 <p>To check which images you have pulled, you can use <code class="docutils literal notranslate"><span class="pre">images</span></code> command with the following syntax:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">images</span>
 </pre></div>
