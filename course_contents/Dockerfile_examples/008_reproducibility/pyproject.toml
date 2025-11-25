@@ -1,0 +1,8 @@
+[project]
+name = "008-reproducibility"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = [
+    "numpy>=2.3.5",
+    "pandas>=2.3.3",
+]

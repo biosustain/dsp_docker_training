@@ -1,0 +1,23 @@
+#!/usr/bin/env zsh
+
+# Ensure an argument is provided
+if [[ -z $1 ]]; then
+  echo "Usage: $0 <prefix>"
+  exit 1
+fi
+
+prefix=$1
+
+# Find the folder that starts with the prefix
+folder=( ${prefix}*(/) )  # the (/) ensures only directories
+
+# If multiple matches, use the first one
+target=${folder[1]}
+
+cmd="docker build -f $target/Dockerfile -t training:$prefix $target"
+echo "Executing: $cmd\n"
+eval $cmd
+
+cmd="docker run training:$prefix"
+echo "\nExecuting: $cmd\n"
+eval $cmd
