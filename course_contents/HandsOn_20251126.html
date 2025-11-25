@@ -507,7 +507,7 @@ docker<span class="w"> </span>run<span class="w"> </span>align_count<span class=
 </section>
 <section id="file-system-mounts">
 <h2>File system mounts<a class="headerlink" href="#file-system-mounts" title="Link to this heading">#</a></h2>
-<p>Containers run in a completely separate file system and it cannot access the hosting file system by default.</p>
+<p>Containers are isolated and run in a completely separate file system and it cannot access the hosting file system by default.</p>
 <p>We can use the <code class="docutils literal notranslate"><span class="pre">--volume</span> <span class="pre">&lt;host-directory&gt;:&lt;container-directory&gt;</span></code> syntax to make a file or a folder available inside our container. <code class="docutils literal notranslate"><span class="pre">-v</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">--volume</span></code>. Its argument consists of two fields separated by a colon (<code class="docutils literal notranslate"><span class="pre">:</span></code>):</p>
 <ul class="simple">
 <li><p>Host source directory path</p></li>
