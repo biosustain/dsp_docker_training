@@ -359,7 +359,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-an-container-in-interactive-mode">Running an container in interactive mode</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-system-mounts">File system mounts</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-image-mounting-the-data">Running the image mounting the data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-the-results">Interpreting the results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results-files-and-interpretion">Results files and interpretion</a></li>
 </ul>
             </nav>
         </div>
@@ -523,9 +523,13 @@ docker<span class="w"> </span>run<span class="w"> </span>align_count<span class=
 </pre></div>
 </div>
 </section>
-<section id="interpreting-the-results">
-<h2>Interpreting the results<a class="headerlink" href="#interpreting-the-results" title="Link to this heading">#</a></h2>
-<p>Results have been copied back from the container to my local results folder (host). Let’s have a look.</p>
+<section id="results-files-and-interpretion">
+<h2>Results files and interpretion<a class="headerlink" href="#results-files-and-interpretion" title="Link to this heading">#</a></h2>
+<p>Results have been copied back from the container to my local <code class="docutils literal notranslate"><span class="pre">results</span></code> folder (host). Let’s have a look.</p>
+<p>In total, four output files are generated:<br />
+Running <code class="docutils literal notranslate"><span class="pre">bowtie2</span></code>/<code class="docutils literal notranslate"><span class="pre">samtools</span></code> generates the sorted alignment file <code class="docutils literal notranslate"><span class="pre">aligned_sorted.bam</span></code> and the bam alignment index <code class="docutils literal notranslate"><span class="pre">aligned_sorted.bam.bai</span></code> (this index is used to accelerate read counting by featureCounts).<br />
+Running <code class="docutils literal notranslate"><span class="pre">featureCounts</span></code>generates the <code class="docutils literal notranslate"><span class="pre">gene_counts.txt</span></code> which holds unnormalised read count data per gene along with additional information like gene length, strand etc. Out of 4305 genes, 2720 genes have a read count of at least 1; the remaining genes have zero counts.
+The <code class="docutils literal notranslate"><span class="pre">gene_counts.txt.summary</span></code>file details count statistics. It shows that 39913 reads were assigned a genomic feature (gene) and counted. Reads that could not be assigned a genomic feature amounted to 3830 and 1840 reads were ambigious (aligned to more than one genomic feature).</p>
 </section>
 </section>
 
@@ -583,7 +587,7 @@ docker<span class="w"> </span>run<span class="w"> </span>align_count<span class=
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-an-container-in-interactive-mode">Running an container in interactive mode</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-system-mounts">File system mounts</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-image-mounting-the-data">Running the image mounting the data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-the-results">Interpreting the results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results-files-and-interpretion">Results files and interpretion</a></li>
 </ul>
   </nav></div>
 
