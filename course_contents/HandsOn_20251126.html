@@ -403,14 +403,22 @@ document.write(`
 </div>
 <p>Once the docker daemon is running you can create and run a new container from an image, we will start with the <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> image, which is hosted on <a class="reference external" href="https://hub.docker.com/" rel="noreferrer" target="_blank">Docker Hub</a>.</p>
 <blockquote>
-<div><p>Docker Hub is Docker’s public registry service where we can &gt;store, share, and manage container images. It hosts Docker &gt;Official Images (like hello-world), Verified Publisher content, &gt;and community-contributed images.</p>
+<div><p>Docker Hub is Docker’s public registry service where we can store, share, and manage container images.
+It hosts Docker Official Images (like hello-world), Verified Publisher content, and community-contributed images.</p>
 </div></blockquote>
 <p>In your command line, run the publicly available <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> image:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">hello</span><span class="o">-</span><span class="n">world</span>
 </pre></div>
 </div>
 <p>We usually run that to check that our installation is working correctly. If you read <code class="docutils literal notranslate"><span class="pre">'Hello</span> <span class="pre">from</span> <span class="pre">Docker!'</span></code> everything is fine for now.</p>
-<p>Please read the information given. Docker first tried to check if we had the container locally, as we did not, the online container repositories were checked. As the container was found, it was donwloaded, and run.</p>
+<p>Please read the information given to understand what happened.</p>
+<p>What happens:</p>
+<ol class="arabic simple">
+<li><p>Client (your terminal) sends run hello-world request.</p></li>
+<li><p>Daemon (the engine) checks if image exists; if not, pulls it.</p></li>
+<li><p>Daemon creates and runs the container (i.e hello-world).</p></li>
+<li><p>Output is sent back to the client (“Hello from Docker!”).</p></li>
+</ol>
 </section>
 <section id="pulling-a-container">
 <h2>Pulling a container<a class="headerlink" href="#pulling-a-container" title="Link to this heading">#</a></h2>
