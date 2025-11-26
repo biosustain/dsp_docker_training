@@ -7,3 +7,5 @@ data/bowtie*
 
 # merge message
 MERGE_MSGO
+
+.DS_Store
