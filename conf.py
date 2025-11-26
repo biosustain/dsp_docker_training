@@ -35,6 +35,7 @@ exclude_patterns = [
     "**/.ipynb_checkpoints/*",
     "jupyter_execute",
     "conf.py",
+    "course_contents/Dockerfile_examples/**",
 ]
 
 
