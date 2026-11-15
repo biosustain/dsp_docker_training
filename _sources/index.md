@@ -32,6 +32,8 @@ course_contents/DockerIntro.md
 course_contents/HandsOn.md
 course_contents/HandsOn_20251126.md
 course_contents/align_and_count_shell_script.md
+course_contents/HandsOn_20261118.md
+course_contents/align_and_count_nfcore_rnaseq_prok_mode_shell_script.md
 ```
 
 ```{toctree}

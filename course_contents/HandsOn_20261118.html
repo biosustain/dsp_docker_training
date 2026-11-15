@@ -1,0 +1,785 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Docker Hands-on training (18-11-2026) &#8212; Data Club Feb 2025: Docker Introduction  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-new-tab-link.css?v=d87cb1ac" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'course_contents/HandsOn_20261118';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Shell script used to quantify and count reads with Salmon" href="align_and_count_nfcore_rnaseq_prok_mode_shell_script.html" />
+    <link rel="prev" title="Shell script used to align and count reads" href="align_and_count_shell_script.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Data Club Feb 2025: Docker Introduction  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/biosustain/dsp_docker_training" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../course_information/Instructions.html">Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../course_information/Location.html">Location</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../course_information/Timing.html">Agenda</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Course contents</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="DockerIntro.html">Docker Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HandsOn.html">Docker Hands-on training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HandsOn_20251126.html">Docker Hands-on training (26-11-2025)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="align_and_count_shell_script.html">Shell script used to align and count reads</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Docker Hands-on training (18-11-2026)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="align_and_count_nfcore_rnaseq_prok_mode_shell_script.html">Shell script used to quantify and count reads with Salmon</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../data/README.html">Files description</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../resources.html">Resources</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/biosustain/dsp_docker_training" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/course_contents/HandsOn_20261118.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Docker Hands-on training (18-11-2026)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-considerations">Initial considerations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-biological-context-and-script-to-run-in-a-docker-container">Data, biological context and script to run in a Docker container</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objective-of-this-hands-on">Objective of this hands-on</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-we-are-going-to-do">What we are going to do</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Initial considerations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Data, biological context and script to run in a Docker container</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-container">Running a container</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pulling-a-container">Pulling a container</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-our-dockerfile">Writing our Dockerfile</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-an-image-from-the-dockerfile">Building an image from the Dockerfile</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-container-in-interactive-mode">Running a container in interactive mode</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-system-mounts">File system mounts</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-container-mounting-the-data">Running the container mounting the data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results-files-and-interpretation">Results files and interpretation</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="docker-hands-on-training-18-11-2026">
+<h1>Docker Hands-on training (18-11-2026)<a class="headerlink" href="#docker-hands-on-training-18-11-2026" title="Link to this heading">#</a></h1>
+<section id="initial-considerations">
+<h2>Initial considerations<a class="headerlink" href="#initial-considerations" title="Link to this heading">#</a></h2>
+<p>In this course, you can work on your laptop if you have installed the Docker in your machine. For local installation:</p>
+<ul class="simple">
+<li><p>Mac: <a class="reference external" href="https://docs.docker.com/desktop/setup/install/mac-install/" rel="noreferrer" target="_blank">https://docs.docker.com/desktop/setup/install/mac-install/</a></p></li>
+<li><p>Linux: <a class="reference external" href="https://docs.docker.com/engine/install/" rel="noreferrer" target="_blank">https://docs.docker.com/engine/install/</a></p></li>
+<li><p>Windows: <a class="reference external" href="https://docs.docker.com/desktop/setup/install/windows-install/" rel="noreferrer" target="_blank">https://docs.docker.com/desktop/setup/install/windows-install/</a></p></li>
+</ul>
+<p>Clone the repository that contain the data, script and all the course information</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">biosustain</span><span class="o">/</span><span class="n">dsp_docker_training</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+<p>Alternatively use Github Codespaces to avoid any system incompatibility. You can open directly a GitHub codespace for this specific repository here: <a class="reference external" href="https://codespaces.new/biosustain/dsp_docker_training" rel="noreferrer" target="_blank"><img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg" /></a></p>
+</section>
+<section id="data-biological-context-and-script-to-run-in-a-docker-container">
+<h2>Data, biological context and script to run in a Docker container<a class="headerlink" href="#data-biological-context-and-script-to-run-in-a-docker-container" title="Link to this heading">#</a></h2>
+<p>Biological context for this hands-on in these <a class="reference download internal" download="" href="../_downloads/e3412e734c868cf89b31016010b14a86/Biological_context_for_HandsOn_20251126.pdf"><span class="xref download myst">slides</span></a></p>
+<p><a class="reference internal" href="align_and_count_nfcore_rnaseq_prok_mode_shell_script.html"><span class="std std-doc">Shell script</span></a> that we want to run inside a container.</p>
+</section>
+<section id="objective-of-this-hands-on">
+<h2>Objective of this hands-on<a class="headerlink" href="#objective-of-this-hands-on" title="Link to this heading">#</a></h2>
+<p>Build a Docker image from a Dockerfile that contains <a class="reference external" href="https://salmon.readthedocs.io/" rel="noreferrer" target="_blank">Salmon</a> and <a class="reference external" href="https://github.com/gpertea/gffread" rel="noreferrer" target="_blank">gffread</a>. Then run a script in a container from that image to count reads per gene for an <em>Escherichia coli</em> RNA-seq sample, using the same steps that <a class="reference external" href="https://nf-co.re/rnaseq" rel="noreferrer" target="_blank">nf-core/rnaseq</a> uses for prokaryotic genomes. The input data stays on your machine and the results come back to it.</p>
+</section>
+<section id="what-we-are-going-to-do">
+<h2>What we are going to do<a class="headerlink" href="#what-we-are-going-to-do" title="Link to this heading">#</a></h2>
+<p><img alt="Hands-on workflow: pull a Debian base image, write a Dockerfile with Salmon and gffread, build the image, and run a container that mounts data/ read-only and results/ read-write to filter the GTF, build the transcriptome, build the Salmon index and quantify the reads" src="../_images/HandsOn_20261118_workflow.svg" /></p>
+<ol class="arabic simple">
+<li><p>Pull the latest Debian image from Docker Hub.</p></li>
+<li><p>Write a Dockerfile that adds Salmon, gffread and our script on top of Debian.</p></li>
+<li><p>Build the Docker image from the Dockerfile.</p></li>
+<li><p>Run a container from that image. It mounts <code class="docutils literal notranslate"><span class="pre">data/</span></code> read-only and <code class="docutils literal notranslate"><span class="pre">results/</span></code> read-write, and runs the script that:</p>
+<ol class="arabic simple">
+<li><p>removes the GTF lines with an empty <code class="docutils literal notranslate"><span class="pre">transcript_id</span></code> (prokaryotic mode),</p></li>
+<li><p>builds the transcriptome with gffread,</p></li>
+<li><p>builds the Salmon index,</p></li>
+<li><p>quantifies the reads with Salmon.</p></li>
+</ol>
+</li>
+<li><p>Look at the read counts in <code class="docutils literal notranslate"><span class="pre">results/</span></code> on your machine.</p></li>
+</ol>
+</section>
+<section id="id1">
+<h2>Initial considerations<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>In this course, you can work on your laptop if you have installed the Docker in your machine. For local installation:</p>
+<ul class="simple">
+<li><p>Mac: <a class="reference external" href="https://docs.docker.com/desktop/setup/install/mac-install/" rel="noreferrer" target="_blank">https://docs.docker.com/desktop/setup/install/mac-install/</a></p></li>
+<li><p>Linux: <a class="reference external" href="https://docs.docker.com/engine/install/" rel="noreferrer" target="_blank">https://docs.docker.com/engine/install/</a></p></li>
+<li><p>Windows: <a class="reference external" href="https://docs.docker.com/desktop/setup/install/windows-install/" rel="noreferrer" target="_blank">https://docs.docker.com/desktop/setup/install/windows-install/</a></p></li>
+</ul>
+<p>Clone the repository that contain the data, script and all the course information</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">biosustain</span><span class="o">/</span><span class="n">dsp_docker_training</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+<p>Alternatively use Github Codespaces to avoid any system incompatibility. You can open directly a GitHub codespace for this specific repository here: <a class="reference external" href="https://codespaces.new/biosustain/dsp_docker_training" rel="noreferrer" target="_blank"><img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg" /></a></p>
+</section>
+<section id="id2">
+<h2>Data, biological context and script to run in a Docker container<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>Biological context for this hands-on in these <a class="reference download internal" download="" href="../_downloads/e3412e734c868cf89b31016010b14a86/Biological_context_for_HandsOn_20251126.pdf"><span class="xref download myst">slides</span></a></p>
+<p><a class="reference internal" href="align_and_count_nfcore_rnaseq_prok_mode_shell_script.html"><span class="std std-doc">Shell script</span></a> that we want to run inside a container.</p>
+</section>
+<section id="running-a-container">
+<h2>Running a container<a class="headerlink" href="#running-a-container" title="Link to this heading">#</a></h2>
+<p>First of all, if you installed Docker Desktop on your machine check that Docker Desktop is open and shows “Running” in the status bar.</p>
+<p>You can also test with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="o">-</span><span class="n">v</span>
+<span class="n">docker</span> <span class="n">info</span>
+</pre></div>
+</div>
+<p>Once the docker daemon is running you can create and run a new container from an image, we will start with the <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> image, which is hosted on <a class="reference external" href="https://hub.docker.com/" rel="noreferrer" target="_blank">Docker Hub</a>.</p>
+<blockquote>
+<div><p>Docker Hub is Docker’s public registry service where we can store, share, and manage container images.
+It hosts Docker Official Images (like hello-world), Verified Publisher content, and community-contributed images.</p>
+</div></blockquote>
+<p>In your command line, run the publicly available <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> image:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">hello</span><span class="o">-</span><span class="n">world</span>
+</pre></div>
+</div>
+<p>We usually run that to check that our installation is working correctly. If you read <code class="docutils literal notranslate"><span class="pre">'Hello</span> <span class="pre">from</span> <span class="pre">Docker!'</span></code> everything is fine for now.</p>
+<p>Please read the information given to understand what happened.</p>
+<p>What happens:</p>
+<ol class="arabic simple">
+<li><p>Client (your terminal) sends run hello-world request.</p></li>
+<li><p>Daemon (the engine) checks if image exists; if not, pulls it.</p></li>
+<li><p>Daemon creates and runs the container (i.e hello-world).</p></li>
+<li><p>Output is sent back to the client (“Hello from Docker!”).</p></li>
+</ol>
+</section>
+<section id="pulling-a-container">
+<h2>Pulling a container<a class="headerlink" href="#pulling-a-container" title="Link to this heading">#</a></h2>
+<p>Pull the latest publicly available debian image: <code class="docutils literal notranslate"><span class="pre">debian:latest</span></code> and verify it has been downloaded. Images are pulled by default from <a class="reference external" href="https://hub.docker.com/" rel="noreferrer" target="_blank">Docker hub</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">debian</span><span class="p">:</span><span class="n">latest</span>
+</pre></div>
+</div>
+<p>In Docker image names like <code class="docutils literal notranslate"><span class="pre">debian:latest</span></code>, the colon separates the image name from its tag.</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">latest</span></code> is the tag Docker uses when no tag is given (<code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span> <span class="pre">debian</span></code> is the same as <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span> <span class="pre">debian:latest</span></code>).
+For the Debian image it points to the current stable release: Debian 13 “Trixie”.
+<code class="docutils literal notranslate"><span class="pre">latest</span></code> moves to a new version over time, so it is handy for exploring but not for reproducible pipelines.</p>
+</div></blockquote>
+<p>Check which Debian version you got:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> <span class="n">debian</span><span class="p">:</span><span class="n">latest</span> <span class="n">cat</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">debian_version</span>
+</pre></div>
+</div>
+<p>To check which images you have pulled, you can use <code class="docutils literal notranslate"><span class="pre">images</span></code> command with the following syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">images</span>
+</pre></div>
+</div>
+</section>
+<section id="writing-our-dockerfile">
+<h2>Writing our Dockerfile<a class="headerlink" href="#writing-our-dockerfile" title="Link to this heading">#</a></h2>
+<p>Docker images are created from a textfile called <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>.</p>
+<p>This text file contains list of commands to assemble and configure the image with the software required.</p>
+<p>For our dockerfile, we will learn the following instructions: <code class="docutils literal notranslate"><span class="pre">FROM</span></code>, <code class="docutils literal notranslate"><span class="pre">LABEL</span></code>, <code class="docutils literal notranslate"><span class="pre">WORKDIR</span></code>, <code class="docutils literal notranslate"><span class="pre">RUN</span></code> and <code class="docutils literal notranslate"><span class="pre">COPY</span></code>
+Go to <a class="reference external" href="https://docs.docker.com/reference/dockerfile/" rel="noreferrer" target="_blank">Dockerfile references</a> and find out what are these instructions for.</p>
+<p>First thing we need is a base image. A dockerfile can use an existing image, and build on top of it. A base image is an image you designate with <code class="docutils literal notranslate"><span class="pre">FROM</span></code> directive in a Dockerfile. A Dockerfile with the <code class="docutils literal notranslate"><span class="pre">FROM</span> <span class="pre">scratch</span></code> directive uses an empty base image. When we build the Docker image from <code class="docutils literal notranslate"><span class="pre">debian:13</span></code> we will get an image with something really close to having installed debian distribution (version 13).</p>
+<p>What do we need to add to our Dockerfile?</p>
+<ul class="simple">
+<li><p>Base image</p></li>
+<li><p>Metadata about the image</p></li>
+<li><p>Working directory</p></li>
+<li><p>Instructions to download and install software</p>
+<ul>
+<li><p>gffread: build the transcriptome (transcript sequences) from the genome and the annotation (GTF)</p></li>
+<li><p>salmon: index the transcriptome and quantify (count) the reads per transcript and per gene</p></li>
+</ul>
+</li>
+<li><p>copy the scripts folder</p></li>
+</ul>
+<p>Open a file called Dockerfile. <code class="docutils literal notranslate"><span class="pre">code</span> <span class="pre">Dockerfile</span></code></p>
+<p>First let’s specify which base image we want to use. We just pulled <code class="docutils literal notranslate"><span class="pre">debian:latest</span></code>, which today is Debian 13. In the Dockerfile we write the version number instead of <code class="docutils literal notranslate"><span class="pre">latest</span></code>, so the image is built on the same Debian release even when <code class="docutils literal notranslate"><span class="pre">latest</span></code> moves to a newer one:</p>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">debian:13</span>
+</pre></div>
+</div>
+<p>Add some metadata to the image with <code class="docutils literal notranslate"><span class="pre">LABEL</span></code>:</p>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">LABEL</span><span class="w"> </span>image.description<span class="o">=</span><span class="s2">&quot;A docker image for quantifying prokaryotic RNA-seq data with Salmon&quot;</span>
+<span class="k">LABEL</span><span class="w"> </span>image.author.name<span class="o">=</span><span class="s2">&quot;Your name&quot;</span>
+</pre></div>
+</div>
+<p>Define the working directory:</p>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+</pre></div>
+</div>
+<p>Next, we are going to update the package manager <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> (included in the debian image) and install the software that we need. Both gffread and salmon are available in <code class="docutils literal notranslate"><span class="pre">apt-get</span></code>, which is the easiest solution. We need to use <code class="docutils literal notranslate"><span class="pre">RUN</span></code> to execute building commands. Removing the <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> package lists at the end of the same <code class="docutils literal notranslate"><span class="pre">RUN</span></code> keeps the image smaller.</p>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>gffread<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>salmon<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>rm<span class="w"> </span>-rf<span class="w"> </span>/var/lib/apt/lists/*
+</pre></div>
+</div>
+<blockquote>
+<div><p>In the previous edition of this course we used featureCounts, which is not in <code class="docutils literal notranslate"><span class="pre">apt-get</span></code>. We had to download it with <code class="docutils literal notranslate"><span class="pre">curl</span></code>, uncompress it and add it to the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> with <code class="docutils literal notranslate"><span class="pre">ENV</span></code>.
+Always check first if your software is in <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> (or another package manager): it makes the Dockerfile shorter and easier to maintain.</p>
+</div></blockquote>
+<p>Finally we are going to copy to the image the scripts folder that contains the script that we are going to run.</p>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">COPY</span><span class="w"> </span>scripts/<span class="w"> </span>./scripts/
+</pre></div>
+</div>
+<p>The complete Dockerfile is in <a class="reference external" href="https://github.com/biosustain/dsp_docker_training/blob/main/docker_file/Dockerfile_salmon" rel="noreferrer" target="_blank">docker_file/Dockerfile_salmon</a>.</p>
+</section>
+<section id="building-an-image-from-the-dockerfile">
+<h2>Building an image from the Dockerfile<a class="headerlink" href="#building-an-image-from-the-dockerfile" title="Link to this heading">#</a></h2>
+<p>When you have a Dockerfile, you can build it to a docker image with the <code class="docutils literal notranslate"><span class="pre">build</span></code> command using the following syntax:
+<code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">build</span> <span class="pre">--tag</span> <span class="pre">&lt;my-image-name:my-optional-image-tag&gt;</span> <span class="pre">&lt;my-location-path&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">--tag</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">-t</span></code>, <code class="docutils literal notranslate"><span class="pre">-f</span></code> specifies the Dockerfile, and last thing is <code class="docutils literal notranslate"><span class="pre">&lt;my-location-path&gt;</span></code> that can be referenced with <code class="docutils literal notranslate"><span class="pre">.</span></code></p>
+<p>Let’s build your Dockerfile to an image:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>salmon_count<span class="w"> </span>-f<span class="w"> </span>docker_file/Dockerfile_salmon<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+<section id="running-a-container-in-interactive-mode">
+<h2>Running a container in interactive mode<a class="headerlink" href="#running-a-container-in-interactive-mode" title="Link to this heading">#</a></h2>
+<p>While we would rather recommend using <em>virtual environments</em> for running specific environments interactively, it can be handy to be familiar with docker’s ability to run a container in interactive mode. This is just useful to check if the expected software is present within a container, but we do not recommend to change anything in the container, instead do it in the Dockerfile.</p>
+<p>This is done by adding the two command line inputs to the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> command: <code class="docutils literal notranslate"><span class="pre">--interactive</span></code> and <code class="docutils literal notranslate"><span class="pre">--tty</span></code>,  which have the equivalents <code class="docutils literal notranslate"><span class="pre">-i</span></code> and <code class="docutils literal notranslate"><span class="pre">-t</span></code>.</p>
+<p>Remember you can always run the following to find out what the parameters used in <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> are:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<p>The interactive mode can be run with the following syntax: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-it</span> <span class="pre">&lt;image-name&gt;</span> <span class="pre">&lt;command&gt;</span></code></p>
+<p>We will launch the BASH shell (<code class="docutils literal notranslate"><span class="pre">bash</span></code>) in the <code class="docutils literal notranslate"><span class="pre">salmon_count</span></code> image:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>salmon_count<span class="w"> </span>bash
+</pre></div>
+</div>
+<p>Then you can check what is in there <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-la</span></code> or in which directory are we <code class="docutils literal notranslate"><span class="pre">pwd</span></code>. Which folder can you see?</p>
+<p>After looking around lets exit the bash with <code class="docutils literal notranslate"><span class="pre">exit</span></code>.</p>
+<p>Check which software versions you included in your Docker image:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>salmon_count<span class="w"> </span>salmon<span class="w"> </span>--version
+docker<span class="w"> </span>run<span class="w"> </span>salmon_count<span class="w"> </span>gffread<span class="w"> </span>--version
+</pre></div>
+</div>
+<p>We know that our images are locally available. We also want to check if our containers are still existing.</p>
+<p>To do this try: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">ps</span> <span class="pre">-a</span></code></p>
+<p>When we do this we can see that they are still existing. There is no reason for this as these containers are supposed to just do one job based on the docker image.</p>
+<p>We can keep our space tidy by adding <code class="docutils literal notranslate"><span class="pre">--rm</span></code> to the run command to make sure the container is wiped after usage.</p>
+</section>
+<section id="file-system-mounts">
+<h2>File system mounts<a class="headerlink" href="#file-system-mounts" title="Link to this heading">#</a></h2>
+<p>Containers are isolated and run in a completely separate file system and it cannot access the hosting file system by default.</p>
+<p>We can use the <code class="docutils literal notranslate"><span class="pre">--volume</span> <span class="pre">&lt;host-directory&gt;:&lt;container-directory&gt;</span></code> syntax to make a file or a folder available inside our container. <code class="docutils literal notranslate"><span class="pre">-v</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">--volume</span></code>. Its argument consists of two fields separated by a colon (<code class="docutils literal notranslate"><span class="pre">:</span></code>):</p>
+<ul class="simple">
+<li><p>Host source directory path</p></li>
+<li><p>Container target directory path</p></li>
+</ul>
+<p>In Docker, there is no fixed hard limit on how many -v (volume mounts) you can attach to a container.</p>
+</section>
+<section id="running-the-container-mounting-the-data">
+<h2>Running the container mounting the data<a class="headerlink" href="#running-the-container-mounting-the-data" title="Link to this heading">#</a></h2>
+<p>Finally we are going to build our command line to run our script to quantify and count the reads inside the Docker container.</p>
+<p>We will now make two mounted volumes, a read-only for data (ro), and a writable one for results</p>
+<p>Mount paths must be absolute on the container side.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span>./data/:/app/data:ro<span class="w"> </span>-v<span class="w"> </span>./results/:/app/results<span class="w"> </span>salmon_count<span class="w"> </span>./scripts/align_and_count_nfcore_rnaseq_prok_mode.sh
+</pre></div>
+</div>
+<p>The script runs four steps (see the <a class="reference internal" href="align_and_count_nfcore_rnaseq_prok_mode_shell_script.html"><span class="std std-doc">shell script</span></a>):</p>
+<ol class="arabic simple">
+<li><p><strong>Prokaryotic mode.</strong> NCBI GTF files for bacteria contain <code class="docutils literal notranslate"><span class="pre">gene</span></code> lines with an empty <code class="docutils literal notranslate"><span class="pre">transcript_id</span> <span class="pre">&quot;&quot;</span></code>. These lines break the transcriptome generation, so we remove them (the same fix nf-core/rnaseq applies to prokaryotic annotations).</p></li>
+<li><p><strong>gffread</strong> builds a fasta file with one sequence per transcript (CDS and non-coding RNAs) from the genome and the filtered GTF. It also writes a transcript-to-gene table.</p></li>
+<li><p><strong>salmon index</strong> prepares the genes and the genome so the reads can be searched quickly.</p></li>
+<li><p><strong>salmon quant</strong> maps the reads to the index (selective alignment) and estimates how many reads come from each transcript, and per gene thanks to the transcript-to-gene table.</p></li>
+</ol>
+<blockquote>
+<div><p>Salmon does not produce an alignment (BAM) file like bowtie2 did. It maps the reads and directly estimates the counts, which makes it much faster.</p>
+</div></blockquote>
+</section>
+<section id="results-files-and-interpretation">
+<h2>Results files and interpretation<a class="headerlink" href="#results-files-and-interpretation" title="Link to this heading">#</a></h2>
+<p>Results have been copied back from the container to my local <code class="docutils literal notranslate"><span class="pre">results/salmon_quant</span></code> folder (host). Let’s have a look.</p>
+<p>The main output files are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">quant.sf</span></code>: estimated read counts per transcript. The <code class="docutils literal notranslate"><span class="pre">NumReads</span></code> column holds the estimated number of reads.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">quant.genes.sf</span></code>: the same values summarised per gene.</p>
+<ul>
+<li><p>Out of 4428 genes, 2341 genes have an estimated read count of at least 1.</p></li>
+<li><p>Counts are <em>estimates</em>, so <code class="docutils literal notranslate"><span class="pre">NumReads</span></code> can have decimals.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">logs/salmon_quant.log</span></code>: the full Salmon log.</p>
+<ul>
+<li><p>Look for the <code class="docutils literal notranslate"><span class="pre">Mapping</span> <span class="pre">rate</span></code> line: about 60% of the 50000 read pairs (29837) were counted.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="align_and_count_shell_script.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Shell script used to align and count reads</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="align_and_count_nfcore_rnaseq_prok_mode_shell_script.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Shell script used to quantify and count reads with Salmon</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-considerations">Initial considerations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-biological-context-and-script-to-run-in-a-docker-container">Data, biological context and script to run in a Docker container</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objective-of-this-hands-on">Objective of this hands-on</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-we-are-going-to-do">What we are going to do</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Initial considerations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Data, biological context and script to run in a Docker container</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-container">Running a container</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pulling-a-container">Pulling a container</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-our-dockerfile">Writing our Dockerfile</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-an-image-from-the-dockerfile">Building an image from the Dockerfile</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-container-in-interactive-mode">Running a container in interactive mode</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-system-mounts">File system mounts</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-container-mounting-the-data">Running the container mounting the data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results-files-and-interpretation">Results files and interpretation</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Albert Palleja
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, DTU Biosustain, Informatics Platform, DSP.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
