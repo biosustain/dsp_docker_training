@@ -1,0 +1,21 @@
+# Adding a base image
+FROM debian:13
+
+# Adding some metadata to the image
+LABEL image.description="A docker image for quantifying prokaryotic RNA-seq data with Salmon"
+LABEL image.author.name="Albert Palleja"
+LABEL image.author.email="apca@dtu.dk"
+
+# Setting the working directory
+WORKDIR /app
+
+# Installing required software from apt-get
+# salmon: quantify reads against a transcriptome
+# gffread: build the transcriptome fasta from the genome and the GTF
+RUN apt-get update && apt-get -y install \
+    gffread \
+    salmon && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy the scripts folder to the image
+COPY scripts/ ./scripts/
