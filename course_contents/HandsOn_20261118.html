@@ -506,6 +506,7 @@ For the Debian image it points to the current stable release: Debian 13 “Trixi
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> <span class="n">debian</span><span class="p">:</span><span class="n">latest</span> <span class="n">cat</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">debian_version</span>
 </pre></div>
 </div>
+<p>If you wondered, adding –rm to the run command is to make sure the container is wiped after usage.</p>
 <p>To check which images you have pulled, you can use <code class="docutils literal notranslate"><span class="pre">images</span></code> command with the following syntax:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">images</span>
 </pre></div>
@@ -533,22 +534,31 @@ Go to <a class="reference external" href="https://docs.docker.com/reference/dock
 </li>
 <li><p>copy the scripts folder</p></li>
 </ul>
-<p>Open a file called Dockerfile. <code class="docutils literal notranslate"><span class="pre">code</span> <span class="pre">Dockerfile</span></code></p>
+<p>Open a file called Dockerfile. <code class="docutils literal notranslate"><span class="pre">code</span> <span class="pre">docker_file/Dockerfile</span></code></p>
 <p>First let’s specify which base image we want to use. We just pulled <code class="docutils literal notranslate"><span class="pre">debian:latest</span></code>, which today is Debian 13. In the Dockerfile we write the version number instead of <code class="docutils literal notranslate"><span class="pre">latest</span></code>, so the image is built on the same Debian release even when <code class="docutils literal notranslate"><span class="pre">latest</span></code> moves to a newer one:</p>
-<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">debian:13</span>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="c"># Adding a base image</span>
+<span class="k">FROM</span><span class="w"> </span><span class="s">debian:13</span>
 </pre></div>
 </div>
 <p>Add some metadata to the image with <code class="docutils literal notranslate"><span class="pre">LABEL</span></code>:</p>
-<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">LABEL</span><span class="w"> </span>image.description<span class="o">=</span><span class="s2">&quot;A docker image for aligning prokaryotic RNA-seq data with bowtie2 and counting reads with Salmon&quot;</span>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="c"># Adding some metadata to the image</span>
+<span class="k">LABEL</span><span class="w"> </span>image.description<span class="o">=</span><span class="s2">&quot;A docker image for aligning prokaryotic RNA-seq data with bowtie2 and counting reads with Salmon&quot;</span>
 <span class="k">LABEL</span><span class="w"> </span>image.author.name<span class="o">=</span><span class="s2">&quot;Your name&quot;</span>
+<span class="k">LABEL</span><span class="w"> </span>image.author.email<span class="o">=</span><span class="s2">&quot;your.email@example.com&quot;</span>
 </pre></div>
 </div>
 <p>Define the working directory:</p>
-<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="c"># Setting the working directory</span>
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
 </pre></div>
 </div>
 <p>Next, we are going to update the package manager <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> (included in the debian image) and install the software that we need. All four tools are available in <code class="docutils literal notranslate"><span class="pre">apt-get</span></code>, which is the easiest solution. We need to use <code class="docutils literal notranslate"><span class="pre">RUN</span></code> to execute building commands. Removing the <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> package lists at the end of the same <code class="docutils literal notranslate"><span class="pre">RUN</span></code> keeps the image smaller.</p>
-<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span><span class="se">\</span>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="c"># Installing required software from apt-get</span>
+<span class="c"># bowtie2: align reads to a reference</span>
+<span class="c"># samtools: deal with .bam files (sorting and indexing them)</span>
+<span class="c"># gffread: build the transcriptome fasta from the genome and the GTF</span>
+<span class="c"># salmon: count reads per transcript and per gene</span>
+<span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>bowtie2<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>gffread<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>salmon<span class="w"> </span><span class="se">\</span>
@@ -561,16 +571,20 @@ Go to <a class="reference external" href="https://docs.docker.com/reference/dock
 Always check first if your software is in <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> (or another package manager): it makes the Dockerfile shorter and easier to maintain.</p>
 </div></blockquote>
 <p>Finally we are going to copy to the image the scripts folder that contains the script that we are going to run.</p>
-<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">COPY</span><span class="w"> </span>scripts/<span class="w"> </span>./scripts/
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="c"># Copy the scripts folder to the image</span>
+<span class="k">COPY</span><span class="w"> </span>scripts/<span class="w"> </span>./scripts/
 </pre></div>
 </div>
-<p>The complete Dockerfile is in <a class="reference external" href="https://github.com/biosustain/dsp_docker_training/blob/main/docker_file/Dockerfile_salmon" rel="noreferrer" target="_blank">docker_file/Dockerfile_salmon</a>.</p>
 </section>
 <section id="building-an-image-from-the-dockerfile">
 <h2>Building an image from the Dockerfile<a class="headerlink" href="#building-an-image-from-the-dockerfile" title="Link to this heading">#</a></h2>
 <p>When you have a Dockerfile, you can build it to a docker image with the <code class="docutils literal notranslate"><span class="pre">build</span></code> command using the following syntax:
 <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">build</span> <span class="pre">--tag</span> <span class="pre">&lt;my-image-name:my-optional-image-tag&gt;</span> <span class="pre">&lt;my-location-path&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">--tag</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">-t</span></code>, <code class="docutils literal notranslate"><span class="pre">-f</span></code> specifies the Dockerfile, and last thing is <code class="docutils literal notranslate"><span class="pre">&lt;my-location-path&gt;</span></code> that can be referenced with <code class="docutils literal notranslate"><span class="pre">.</span></code></p>
 <p>Let’s build your Dockerfile to an image:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>align_count<span class="w"> </span>-f<span class="w"> </span>docker_file/Dockerfile<span class="w"> </span>.
+</pre></div>
+</div>
+<p>If in doubt for whatever reason of your Dockerfile, the complete Dockerfile prepared by us is in <a class="reference external" href="https://github.com/biosustain/dsp_docker_training/blob/main/docker_file/Dockerfile_salmon" rel="noreferrer" target="_blank">docker_file/Dockerfile_salmon</a>. If you use this one change the command accordingly:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>align_count<span class="w"> </span>-f<span class="w"> </span>docker_file/Dockerfile_salmon<span class="w"> </span>.
 </pre></div>
 </div>
@@ -599,7 +613,15 @@ docker<span class="w"> </span>run<span class="w"> </span>align_count<span class=
 </div>
 <p>We know that our images are locally available. We also want to check if our containers are still existing.</p>
 <p>To do this try: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">ps</span> <span class="pre">-a</span></code></p>
-<p>When we do this we can see that they are still existing. There is no reason for this as these containers are supposed to just do one job based on the docker image.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">CONTAINER</span> <span class="pre">ID</span></code> and <code class="docutils literal notranslate"><span class="pre">NAMES</span></code> columns identify each container. The <code class="docutils literal notranslate"><span class="pre">STATUS</span></code> column shows whether it is still running (Up …) or stopped (Exited …). We can see that they are stopped but still existing. There is no reason for this as these containers are supposed to just do one job based on the docker image.</p>
+<p>To remove specific containers, by ID or name:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>rm<span class="w"> </span>&lt;container-id-or-name&gt;
+</pre></div>
+</div>
+<p>And to remove all stopped ones at once:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>prune
+</pre></div>
+</div>
 <p>We can keep our space tidy by adding <code class="docutils literal notranslate"><span class="pre">--rm</span></code> to the run command to make sure the container is wiped after usage.</p>
 </section>
 <section id="file-system-mounts">
@@ -645,7 +667,7 @@ docker<span class="w"> </span>run<span class="w"> </span>align_count<span class=
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">quant.sf</span></code>: estimated read counts per transcript. The <code class="docutils literal notranslate"><span class="pre">NumReads</span></code> column holds the estimated number of reads.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">quant.genes.sf</span></code>: the same values summarised per gene. Out of 4511 genes, 2426 genes have an estimated read count of at least 1.</p></li>
-<li><p>Counts are <em>estimates</em>, so <code class="docutils literal notranslate"><span class="pre">NumReads</span></code> can have decimals.</p></li>
+<li><p>Counts are <em>estimates</em>, so <code class="docutils literal notranslate"><span class="pre">NumReads</span></code> can have decimals (Salmon shares out reads that match more than one transcript, and those shares are usually fractions)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">logs/salmon_quant.log</span></code>: the full Salmon log. Look for the <code class="docutils literal notranslate"><span class="pre">Total</span> <span class="pre">#</span> <span class="pre">of</span> <span class="pre">mapped</span> <span class="pre">reads</span></code> line: 31921 read pairs were counted.</p></li>
 </ul>
 </li>
