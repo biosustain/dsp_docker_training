@@ -550,7 +550,7 @@ We need to use <code class="docutils literal notranslate"><span class="pre">RUN<
 <p>When you have a Dockerfile, you can build it to a docker image with the <code class="docutils literal notranslate"><span class="pre">build</span></code> command using the following syntax:
 <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">build</span> <span class="pre">--tag</span> <span class="pre">&lt;my-image-name:my-optional-image-tag&gt;</span> <span class="pre">&lt;my-location-path&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">--tag</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">-t</span></code>, <code class="docutils literal notranslate"><span class="pre">-f</span></code> specifies the Dockerfile, and last thing is <code class="docutils literal notranslate"><span class="pre">&lt;my-location-path&gt;</span></code> that can be referenced with <code class="docutils literal notranslate"><span class="pre">.</span></code></p>
 <p>Let’s build your Dockerfile to an image:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>align_count<span class="w"> </span>-f<span class="w"> </span>docker_file/Dockerfile<span class="w"> </span>.
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>align_count<span class="w"> </span>-f<span class="w"> </span>docker_file/Dockerfile_featurecounts<span class="w"> </span>.
 </pre></div>
 </div>
 </section>
