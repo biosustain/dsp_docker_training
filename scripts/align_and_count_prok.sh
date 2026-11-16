@@ -5,7 +5,7 @@
 # In this script we want to align the reads from a subsampled Escherichia coli sample to E. coli K-12 genome 
 # and count the reads aligned per gene.
 # For this purpose we are going to use bowtie2 for the alignment and featureCounts for the read counting
-# We will run this script inside a docker container built with the Dockerfile in docker_file/Dockerfile
+# We will run this script inside a docker container built with the Dockerfile in docker_file/Dockerfile_featurecounts
 
 # Define directories and parameters
 GENOME_DIR="/app/bowtie2_index"      # Directory with bowtie2 genome index
