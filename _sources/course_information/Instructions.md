@@ -6,7 +6,7 @@ To avoid installation and configuration issues we are going to deploy an environ
 
 If you want to open directly a GitHub codespace for this specific repository click here: [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/biosustain/dsp_docker_training)
 
-Don't change the configuration and accept the default option. It says pay but you're not paying...
+Don't change the configuration and accept the default option. It says pay but you're not paying: every personal GitHub account includes free Codespaces usage every month (120 core hours on the Free plan, that is 60 hours on the default 2-core machine), which is much more than what we need today.
 
 If you want to do it manually go to [course website](https://github.com/biosustain/dsp_docker_training)
 
