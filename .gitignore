@@ -1,9 +1,10 @@
 _build
 *.docx
 
-# folders to ignore
+# folders and files to ignore
 results/
 data/bowtie*
+docker_file/Dockerfile
 
 # merge message
 MERGE_MSGO
