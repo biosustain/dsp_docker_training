@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Shell script used to quantify and count reads with Salmon &#8212; Data Club Feb 2025: Docker Introduction  documentation</title>
+    <title>Shell script used to align reads with bowtie2 and count them with Salmon &#8212; Data Club Feb 2025: Docker Introduction  documentation</title>
   
   
   
@@ -218,7 +218,7 @@
 <li class="toctree-l1"><a class="reference internal" href="HandsOn_20251126.html">Docker Hands-on training (26-11-2025)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="align_and_count_shell_script.html">Shell script used to align and count reads</a></li>
 <li class="toctree-l1"><a class="reference internal" href="HandsOn_20261118.html">Docker Hands-on training (18-11-2026)</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Shell script used to quantify and count reads with Salmon</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Shell script used to align reads with bowtie2 and count them with Salmon</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">data</span></p>
 <ul class="nav bd-sidenav">
@@ -381,7 +381,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Shell script used to quantify and count reads with Salmon</h1>
+    <h1>Shell script used to align reads with bowtie2 and count them with Salmon</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -395,31 +395,27 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="shell-script-used-to-quantify-and-count-reads-with-salmon">
-<h1>Shell script used to quantify and count reads with Salmon<a class="headerlink" href="#shell-script-used-to-quantify-and-count-reads-with-salmon" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="shell-script-used-to-align-reads-with-bowtie2-and-count-them-with-salmon">
+<h1>Shell script used to align reads with bowtie2 and count them with Salmon<a class="headerlink" href="#shell-script-used-to-align-reads-with-bowtie2-and-count-them-with-salmon" title="Link to this heading">#</a></h1>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="c1"># Author: Juliana Assis - nf-core-hackathon 2025</span>
 <span class="c1"># Adapted by Albert Palleja for the Docker course - 2025-11-26</span>
-<span class="c1"># Salmon version (nf-core/rnaseq-like prokaryotic mode) for the Docker course - 2026-11-18</span>
+<span class="c1"># Salmon version (like the nf-core/rnaseq &quot;bowtie2_salmon&quot; prokaryotic mode) for the Docker course - 2026-11-18</span>
 
-<span class="c1"># In this script we want to quantify the reads from a subsampled Escherichia coli sample against the</span>
-<span class="c1"># E. coli K-12 transcriptome and count the reads per gene.</span>
-<span class="c1"># For this purpose we follow the same steps that nf-core/rnaseq uses for prokaryotic genomes with Salmon:</span>
-<span class="c1">#   1. Remove the GTF lines with an empty transcript_id (the &quot;gene&quot; lines in NCBI prokaryotic GTFs)</span>
-<span class="c1">#   2. Build a transcriptome fasta from the genome + filtered GTF with gffread</span>
-<span class="c1">#   3. Build a decoy-aware Salmon index (transcriptome + genome as decoy)</span>
-<span class="c1">#   4. Quantify the paired-end reads with Salmon (selective alignment) and summarise counts per gene</span>
+<span class="c1"># In this script we want to align the reads from a subsampled Escherichia coli sample to the E. coli K-12</span>
+<span class="c1"># transcriptome (the sequences of its genes) and count the reads per transcript and per gene.</span>
+<span class="c1"># For this purpose we are going to use bowtie2 for the alignment and Salmon for the read counting</span>
 <span class="c1"># We will run this script inside a docker container built with the Dockerfile in docker_file/Dockerfile_salmon</span>
 
 <span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
 
 <span class="c1"># Define directories and parameters</span>
 <span class="nv">REF_DIR</span><span class="o">=</span><span class="s2">&quot;/app/reference&quot;</span><span class="w">                                          </span><span class="c1"># Directory for files derived from the reference</span>
-<span class="nv">SALMON_INDEX</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">REF_DIR</span><span class="si">}</span><span class="s2">/salmon_index&quot;</span><span class="w">                            </span><span class="c1"># Directory with the Salmon index</span>
+<span class="nv">GENOME_DIR</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">REF_DIR</span><span class="si">}</span><span class="s2">/bowtie2_index&quot;</span><span class="w">                             </span><span class="c1"># Bowtie2 transcriptome index (prefix)</span>
 <span class="nv">GTF_FILE</span><span class="o">=</span><span class="s2">&quot;/app/data/GCF_000005845.2_ASM584v2_genomic.gtf&quot;</span><span class="w">         </span><span class="c1"># GTF annotation file</span>
 <span class="nv">GENOME_FASTA</span><span class="o">=</span><span class="s2">&quot;/app/data/GCF_000005845.2_ASM584v2_genomic.fna&quot;</span><span class="w">     </span><span class="c1"># Genome fasta file</span>
 <span class="nv">FILTERED_GTF</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">REF_DIR</span><span class="si">}</span><span class="s2">/genomic_filtered.gtf&quot;</span><span class="w">                    </span><span class="c1"># GTF without empty transcript_id lines</span>
-<span class="nv">TRANSCRIPT_FASTA</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">REF_DIR</span><span class="si">}</span><span class="s2">/transcripts.fa&quot;</span><span class="w">                      </span><span class="c1"># Transcript (CDS/ncRNA) sequences</span>
+<span class="nv">TRANSCRIPT_FASTA</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">REF_DIR</span><span class="si">}</span><span class="s2">/transcripts.fa&quot;</span><span class="w">                      </span><span class="c1"># Transcript sequences (index generation and Salmon)</span>
 <span class="nv">TX2GENE</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">REF_DIR</span><span class="si">}</span><span class="s2">/tx2gene.tsv&quot;</span><span class="w">                                  </span><span class="c1"># Transcript-to-gene table</span>
 <span class="nv">READ1</span><span class="o">=</span><span class="s2">&quot;/app/data/SRR9681150_1_sub_50k.fastq.gz&quot;</span><span class="w">                   </span><span class="c1"># Forward reads</span>
 <span class="nv">READ2</span><span class="o">=</span><span class="s2">&quot;/app/data/SRR9681150_2_sub_50k.fastq.gz&quot;</span><span class="w">                   </span><span class="c1"># Reverse reads</span>
@@ -430,14 +426,13 @@
 mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$REF_DIR</span><span class="s2">&quot;</span>
 mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$RESULTS</span><span class="s2">&quot;</span>
 
-<span class="c1"># Step 1: Prokaryotic mode - remove GTF lines with an empty transcript_id</span>
-<span class="c1"># NCBI prokaryotic GTFs contain &quot;gene&quot; lines with transcript_id &quot;&quot; that break transcriptome generation</span>
+<span class="c1"># Step 0: Prepare the transcriptome (prokaryotic mode)</span>
+<span class="c1"># Salmon counts reads per transcript, so the reads must be aligned to the transcript sequences, not to the genome.</span>
+<span class="c1"># NCBI prokaryotic GTFs contain &quot;gene&quot; lines with transcript_id &quot;&quot; that break transcriptome generation: remove them</span>
 grep<span class="w"> </span>-v<span class="w"> </span><span class="s1">&#39;transcript_id &quot;&quot;&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$GTF_FILE</span><span class="s2">&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FILTERED_GTF</span><span class="s2">&quot;</span>
-
-<span class="c1"># Step 2: Build the transcriptome fasta (one sequence per transcript) from the genome and the filtered GTF</span>
-<span class="c1"># The genome is copied first because /app/data is mounted read-only and gffread writes a .fai index next to it</span>
-<span class="c1"># --table writes a transcript-to-gene table (same transcript names as in the fasta),</span>
-<span class="c1"># so Salmon can also report counts per gene</span>
+<span class="c1"># gffread builds one sequence per transcript from the genome and the filtered GTF.</span>
+<span class="c1"># The genome is copied first because /app/data is mounted read-only and gffread writes a .fai index next to it.</span>
+<span class="c1"># --table writes a transcript-to-gene table, so Salmon can also report counts per gene</span>
 cp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$GENOME_FASTA</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">REF_DIR</span><span class="si">}</span><span class="s2">/genome.fna&quot;</span>
 gffread<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FILTERED_GTF</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">	</span>-g<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">REF_DIR</span><span class="si">}</span><span class="s2">/genome.fna&quot;</span><span class="w"> </span><span class="se">\</span>
@@ -445,28 +440,35 @@ gffread<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$F
 <span class="w">	</span>--table<span class="w"> </span>@id,@geneid<span class="w"> </span><span class="se">\</span>
 <span class="w">	</span>-o<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TX2GENE</span><span class="s2">&quot;</span>
 
-<span class="c1"># Step 3: Build a decoy-aware Salmon index (only required once)</span>
-<span class="c1"># The genome is appended to the transcriptome as a decoy, so reads coming from non-annotated regions</span>
-<span class="c1"># are not wrongly assigned to transcripts</span>
-grep<span class="w"> </span><span class="s1">&#39;^&gt;&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">REF_DIR</span><span class="si">}</span><span class="s2">/genome.fna&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39; &#39;</span><span class="w"> </span>-f<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s/^&gt;//&#39;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">REF_DIR</span><span class="si">}</span><span class="s2">/decoys.txt&quot;</span>
-cat<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TRANSCRIPT_FASTA</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">REF_DIR</span><span class="si">}</span><span class="s2">/genome.fna&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">REF_DIR</span><span class="si">}</span><span class="s2">/gentrome.fa&quot;</span>
-salmon<span class="w"> </span>index<span class="w"> </span><span class="se">\</span>
-<span class="w">	</span>-t<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">REF_DIR</span><span class="si">}</span><span class="s2">/gentrome.fa&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">	</span>-d<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">REF_DIR</span><span class="si">}</span><span class="s2">/decoys.txt&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">	</span>-i<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SALMON_INDEX</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">	</span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$THREADS</span><span class="s2">&quot;</span>
+<span class="c1"># Step 1: Generate bowtie index (only required once)</span>
+bowtie2-build<span class="w"> </span>--threads<span class="w"> </span><span class="nv">$THREADS</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TRANSCRIPT_FASTA</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$GENOME_DIR</span><span class="s2">&quot;</span>
 
-<span class="c1"># Step 4: Quantify the reads with Salmon</span>
-<span class="c1"># -l A: automatically detect the library type (strandedness)</span>
-<span class="c1"># -g: summarise transcript-level estimates to gene level (quant.genes.sf)</span>
-salmon<span class="w"> </span>quant<span class="w"> </span><span class="se">\</span>
-<span class="w">	</span>-i<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SALMON_INDEX</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">	</span>-l<span class="w"> </span>A<span class="w"> </span><span class="se">\</span>
+<span class="c1"># Step 2: Run bowtie2 alignment and sort the output BAM file</span>
+<span class="c1"># -k 200: report up to 200 alignments per read, so Salmon can share reads that match several transcripts</span>
+<span class="c1"># The unsorted BAM is kept for Salmon, which needs the alignments of each read next to each other</span>
+bowtie2<span class="w"> </span>-x<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$GENOME_DIR</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">	</span>-1<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$READ1</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">	</span>-2<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$READ2</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>-p<span class="w"> </span><span class="nv">$THREADS</span><span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>-k<span class="w"> </span><span class="m">200</span><span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>--no-unal<span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>--no-mixed<span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>--no-discordant<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>samtools<span class="w"> </span>view<span class="w"> </span>-b<span class="w"> </span>-F<span class="w"> </span><span class="m">4</span><span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">RESULTS</span><span class="si">}</span><span class="s2">/aligned.bam&quot;</span>
+samtools<span class="w"> </span>sort<span class="w"> </span>-@<span class="w"> </span><span class="nv">$THREADS</span><span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">RESULTS</span><span class="si">}</span><span class="s2">/aligned_sorted.bam&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">RESULTS</span><span class="si">}</span><span class="s2">/aligned.bam&quot;</span>
+
+<span class="c1"># Step 3: Index the sorted BAM file: enables fast random access to specific regions of the data</span>
+samtools<span class="w"> </span>index<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">RESULTS</span><span class="si">}</span><span class="s2">/aligned_sorted.bam&quot;</span>
+
+<span class="c1"># Step 4: Run Salmon to count reads per transcript and gene</span>
+<span class="c1"># -l A: automatically detect the library type</span>
+<span class="c1"># -g: summarise transcript counts to gene level (quant.genes.sf)</span>
+salmon<span class="w"> </span>quant<span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>-t<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TRANSCRIPT_FASTA</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>-l<span class="w"> </span>A<span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>-a<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">RESULTS</span><span class="si">}</span><span class="s2">/aligned.bam&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">	</span>-g<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TX2GENE</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">	</span>--validateMappings<span class="w"> </span><span class="se">\</span>
-<span class="w">	</span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$THREADS</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">	</span>-p<span class="w"> </span><span class="nv">$THREADS</span><span class="w"> </span><span class="se">\</span>
 <span class="w">	</span>-o<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">RESULTS</span><span class="si">}</span><span class="s2">/salmon_quant&quot;</span>
 </pre></div>
 </div>

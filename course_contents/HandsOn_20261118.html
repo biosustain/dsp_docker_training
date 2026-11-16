@@ -51,7 +51,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Shell script used to quantify and count reads with Salmon" href="align_and_count_nfcore_rnaseq_prok_mode_shell_script.html" />
+    <link rel="next" title="Shell script used to align reads with bowtie2 and count them with Salmon" href="align_and_count_nfcore_rnaseq_prok_mode_shell_script.html" />
     <link rel="prev" title="Shell script used to align and count reads" href="align_and_count_shell_script.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -222,7 +222,7 @@
 <li class="toctree-l1"><a class="reference internal" href="HandsOn_20251126.html">Docker Hands-on training (26-11-2025)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="align_and_count_shell_script.html">Shell script used to align and count reads</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Docker Hands-on training (18-11-2026)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="align_and_count_nfcore_rnaseq_prok_mode_shell_script.html">Shell script used to quantify and count reads with Salmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="align_and_count_nfcore_rnaseq_prok_mode_shell_script.html">Shell script used to align reads with bowtie2 and count them with Salmon</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">data</span></p>
 <ul class="nav bd-sidenav">
@@ -401,8 +401,6 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-biological-context-and-script-to-run-in-a-docker-container">Data, biological context and script to run in a Docker container</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objective-of-this-hands-on">Objective of this hands-on</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-we-are-going-to-do">What we are going to do</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Initial considerations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Data, biological context and script to run in a Docker container</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-container">Running a container</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pulling-a-container">Pulling a container</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-our-dockerfile">Writing our Dockerfile</a></li>
@@ -445,44 +443,25 @@
 </section>
 <section id="objective-of-this-hands-on">
 <h2>Objective of this hands-on<a class="headerlink" href="#objective-of-this-hands-on" title="Link to this heading">#</a></h2>
-<p>Build a Docker image from a Dockerfile that contains <a class="reference external" href="https://salmon.readthedocs.io/" rel="noreferrer" target="_blank">Salmon</a> and <a class="reference external" href="https://github.com/gpertea/gffread" rel="noreferrer" target="_blank">gffread</a>. Then run a script in a container from that image to count reads per gene for an <em>Escherichia coli</em> RNA-seq sample, using the same steps that <a class="reference external" href="https://nf-co.re/rnaseq" rel="noreferrer" target="_blank">nf-core/rnaseq</a> uses for prokaryotic genomes. The input data stays on your machine and the results come back to it.</p>
+<p>Build a Docker image from a Dockerfile that contains <a class="reference external" href="https://bowtie-bio.sourceforge.net/bowtie2/" rel="noreferrer" target="_blank">bowtie2</a>, <a class="reference external" href="https://www.htslib.org/" rel="noreferrer" target="_blank">samtools</a>, <a class="reference external" href="https://github.com/gpertea/gffread" rel="noreferrer" target="_blank">gffread</a> and <a class="reference external" href="https://salmon.readthedocs.io/" rel="noreferrer" target="_blank">Salmon</a>. Then run a script in a container from that image to align the reads of an <em>Escherichia coli</em> RNA-seq sample with bowtie2 and count the reads per transcript and per gene with Salmon, in the same way as the <code class="docutils literal notranslate"><span class="pre">bowtie2_salmon</span></code> mode of <a class="reference external" href="https://nf-co.re/rnaseq" rel="noreferrer" target="_blank">nf-core/rnaseq</a> for prokaryotes. The input data stays on your machine and the results come back to it.</p>
 </section>
 <section id="what-we-are-going-to-do">
 <h2>What we are going to do<a class="headerlink" href="#what-we-are-going-to-do" title="Link to this heading">#</a></h2>
-<p><img alt="Hands-on workflow: pull a Debian base image, write a Dockerfile with Salmon and gffread, build the image, and run a container that mounts data/ read-only and results/ read-write to filter the GTF, build the transcriptome, build the Salmon index and quantify the reads" src="../_images/HandsOn_20261118_workflow.svg" /></p>
+<p><img alt="Hands-on workflow: pull a Debian base image, write a Dockerfile with bowtie2, samtools, gffread and Salmon, build the image, and run a container that mounts data/ read-only and results/ read-write to build the bowtie2 index, align and sort, index the BAM and count reads with Salmon" src="../_images/HandsOn_20261118_workflow.svg" /></p>
 <ol class="arabic simple">
 <li><p>Pull the latest Debian image from Docker Hub.</p></li>
-<li><p>Write a Dockerfile that adds Salmon, gffread and our script on top of Debian.</p></li>
+<li><p>Write a Dockerfile that adds bowtie2, samtools, gffread, Salmon and our script on top of Debian.</p></li>
 <li><p>Build the Docker image from the Dockerfile.</p></li>
 <li><p>Run a container from that image. It mounts <code class="docutils literal notranslate"><span class="pre">data/</span></code> read-only and <code class="docutils literal notranslate"><span class="pre">results/</span></code> read-write, and runs the script that:</p>
 <ol class="arabic simple">
-<li><p>removes the GTF lines with an empty <code class="docutils literal notranslate"><span class="pre">transcript_id</span></code> (prokaryotic mode),</p></li>
-<li><p>builds the transcriptome with gffread,</p></li>
-<li><p>builds the Salmon index,</p></li>
-<li><p>quantifies the reads with Salmon.</p></li>
+<li><p>generates the bowtie2 index,</p></li>
+<li><p>aligns the reads with bowtie2 and sorts the BAM file,</p></li>
+<li><p>indexes the sorted BAM file,</p></li>
+<li><p>counts the reads per transcript and per gene with Salmon.</p></li>
 </ol>
 </li>
-<li><p>Look at the read counts in <code class="docutils literal notranslate"><span class="pre">results/</span></code> on your machine.</p></li>
+<li><p>Look at the results in <code class="docutils literal notranslate"><span class="pre">results/</span></code> on your machine.</p></li>
 </ol>
-</section>
-<section id="id1">
-<h2>Initial considerations<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
-<p>In this course, you can work on your laptop if you have installed the Docker in your machine. For local installation:</p>
-<ul class="simple">
-<li><p>Mac: <a class="reference external" href="https://docs.docker.com/desktop/setup/install/mac-install/" rel="noreferrer" target="_blank">https://docs.docker.com/desktop/setup/install/mac-install/</a></p></li>
-<li><p>Linux: <a class="reference external" href="https://docs.docker.com/engine/install/" rel="noreferrer" target="_blank">https://docs.docker.com/engine/install/</a></p></li>
-<li><p>Windows: <a class="reference external" href="https://docs.docker.com/desktop/setup/install/windows-install/" rel="noreferrer" target="_blank">https://docs.docker.com/desktop/setup/install/windows-install/</a></p></li>
-</ul>
-<p>Clone the repository that contain the data, script and all the course information</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">biosustain</span><span class="o">/</span><span class="n">dsp_docker_training</span><span class="o">.</span><span class="n">git</span>
-</pre></div>
-</div>
-<p>Alternatively use Github Codespaces to avoid any system incompatibility. You can open directly a GitHub codespace for this specific repository here: <a class="reference external" href="https://codespaces.new/biosustain/dsp_docker_training" rel="noreferrer" target="_blank"><img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg" /></a></p>
-</section>
-<section id="id2">
-<h2>Data, biological context and script to run in a Docker container<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
-<p>Biological context for this hands-on in these <a class="reference download internal" download="" href="../_downloads/e3412e734c868cf89b31016010b14a86/Biological_context_for_HandsOn_20251126.pdf"><span class="xref download myst">slides</span></a></p>
-<p><a class="reference internal" href="align_and_count_nfcore_rnaseq_prok_mode_shell_script.html"><span class="std std-doc">Shell script</span></a> that we want to run inside a container.</p>
 </section>
 <section id="running-a-container">
 <h2>Running a container<a class="headerlink" href="#running-a-container" title="Link to this heading">#</a></h2>
@@ -546,8 +525,10 @@ Go to <a class="reference external" href="https://docs.docker.com/reference/dock
 <li><p>Working directory</p></li>
 <li><p>Instructions to download and install software</p>
 <ul>
-<li><p>gffread: build the transcriptome (transcript sequences) from the genome and the annotation (GTF)</p></li>
-<li><p>salmon: index the transcriptome and quantify (count) the reads per transcript and per gene</p></li>
+<li><p>bowtie2: align reads to a reference</p></li>
+<li><p>samtools: deal with .bam files (sorting and indexing them)</p></li>
+<li><p>gffread: build the transcript sequences from the genome and the annotation (GTF)</p></li>
+<li><p>salmon: count reads per transcript and per gene</p></li>
 </ul>
 </li>
 <li><p>copy the scripts folder</p></li>
@@ -558,7 +539,7 @@ Go to <a class="reference external" href="https://docs.docker.com/reference/dock
 </pre></div>
 </div>
 <p>Add some metadata to the image with <code class="docutils literal notranslate"><span class="pre">LABEL</span></code>:</p>
-<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">LABEL</span><span class="w"> </span>image.description<span class="o">=</span><span class="s2">&quot;A docker image for quantifying prokaryotic RNA-seq data with Salmon&quot;</span>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">LABEL</span><span class="w"> </span>image.description<span class="o">=</span><span class="s2">&quot;A docker image for aligning prokaryotic RNA-seq data with bowtie2 and counting reads with Salmon&quot;</span>
 <span class="k">LABEL</span><span class="w"> </span>image.author.name<span class="o">=</span><span class="s2">&quot;Your name&quot;</span>
 </pre></div>
 </div>
@@ -566,10 +547,12 @@ Go to <a class="reference external" href="https://docs.docker.com/reference/dock
 <div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
 </pre></div>
 </div>
-<p>Next, we are going to update the package manager <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> (included in the debian image) and install the software that we need. Both gffread and salmon are available in <code class="docutils literal notranslate"><span class="pre">apt-get</span></code>, which is the easiest solution. We need to use <code class="docutils literal notranslate"><span class="pre">RUN</span></code> to execute building commands. Removing the <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> package lists at the end of the same <code class="docutils literal notranslate"><span class="pre">RUN</span></code> keeps the image smaller.</p>
+<p>Next, we are going to update the package manager <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> (included in the debian image) and install the software that we need. All four tools are available in <code class="docutils literal notranslate"><span class="pre">apt-get</span></code>, which is the easiest solution. We need to use <code class="docutils literal notranslate"><span class="pre">RUN</span></code> to execute building commands. Removing the <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> package lists at the end of the same <code class="docutils literal notranslate"><span class="pre">RUN</span></code> keeps the image smaller.</p>
 <div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>bowtie2<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>gffread<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>salmon<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>salmon<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>samtools<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>rm<span class="w"> </span>-rf<span class="w"> </span>/var/lib/apt/lists/*
 </pre></div>
 </div>
@@ -588,7 +571,7 @@ Always check first if your software is in <code class="docutils literal notransl
 <p>When you have a Dockerfile, you can build it to a docker image with the <code class="docutils literal notranslate"><span class="pre">build</span></code> command using the following syntax:
 <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">build</span> <span class="pre">--tag</span> <span class="pre">&lt;my-image-name:my-optional-image-tag&gt;</span> <span class="pre">&lt;my-location-path&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">--tag</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">-t</span></code>, <code class="docutils literal notranslate"><span class="pre">-f</span></code> specifies the Dockerfile, and last thing is <code class="docutils literal notranslate"><span class="pre">&lt;my-location-path&gt;</span></code> that can be referenced with <code class="docutils literal notranslate"><span class="pre">.</span></code></p>
 <p>Let’s build your Dockerfile to an image:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>salmon_count<span class="w"> </span>-f<span class="w"> </span>docker_file/Dockerfile_salmon<span class="w"> </span>.
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>align_count<span class="w"> </span>-f<span class="w"> </span>docker_file/Dockerfile_salmon<span class="w"> </span>.
 </pre></div>
 </div>
 </section>
@@ -601,15 +584,17 @@ Always check first if your software is in <code class="docutils literal notransl
 </pre></div>
 </div>
 <p>The interactive mode can be run with the following syntax: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-it</span> <span class="pre">&lt;image-name&gt;</span> <span class="pre">&lt;command&gt;</span></code></p>
-<p>We will launch the BASH shell (<code class="docutils literal notranslate"><span class="pre">bash</span></code>) in the <code class="docutils literal notranslate"><span class="pre">salmon_count</span></code> image:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>salmon_count<span class="w"> </span>bash
+<p>We will launch the BASH shell (<code class="docutils literal notranslate"><span class="pre">bash</span></code>) in the <code class="docutils literal notranslate"><span class="pre">align_count</span></code> image:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>align_count<span class="w"> </span>bash
 </pre></div>
 </div>
 <p>Then you can check what is in there <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-la</span></code> or in which directory are we <code class="docutils literal notranslate"><span class="pre">pwd</span></code>. Which folder can you see?</p>
 <p>After looking around lets exit the bash with <code class="docutils literal notranslate"><span class="pre">exit</span></code>.</p>
 <p>Check which software versions you included in your Docker image:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>salmon_count<span class="w"> </span>salmon<span class="w"> </span>--version
-docker<span class="w"> </span>run<span class="w"> </span>salmon_count<span class="w"> </span>gffread<span class="w"> </span>--version
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>align_count<span class="w"> </span>bowtie2<span class="w"> </span>--version
+docker<span class="w"> </span>run<span class="w"> </span>align_count<span class="w"> </span>samtools<span class="w"> </span>--version
+docker<span class="w"> </span>run<span class="w"> </span>align_count<span class="w"> </span>gffread<span class="w"> </span>--version
+docker<span class="w"> </span>run<span class="w"> </span>align_count<span class="w"> </span>salmon<span class="w"> </span>--version
 </pre></div>
 </div>
 <p>We know that our images are locally available. We also want to check if our containers are still existing.</p>
@@ -629,38 +614,39 @@ docker<span class="w"> </span>run<span class="w"> </span>salmon_count<span class
 </section>
 <section id="running-the-container-mounting-the-data">
 <h2>Running the container mounting the data<a class="headerlink" href="#running-the-container-mounting-the-data" title="Link to this heading">#</a></h2>
-<p>Finally we are going to build our command line to run our script to quantify and count the reads inside the Docker container.</p>
+<p>Finally we are going to build our command line to run our script to align and count the reads inside the Docker container.</p>
 <p>We will now make two mounted volumes, a read-only for data (ro), and a writable one for results</p>
 <p>Mount paths must be absolute on the container side.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span>./data/:/app/data:ro<span class="w"> </span>-v<span class="w"> </span>./results/:/app/results<span class="w"> </span>salmon_count<span class="w"> </span>./scripts/align_and_count_nfcore_rnaseq_prok_mode.sh
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span>./data/:/app/data:ro<span class="w"> </span>-v<span class="w"> </span>./results/:/app/results<span class="w"> </span>align_count<span class="w"> </span>./scripts/align_and_count_nfcore_rnaseq_prok_mode.sh
 </pre></div>
 </div>
-<p>The script runs four steps (see the <a class="reference internal" href="align_and_count_nfcore_rnaseq_prok_mode_shell_script.html"><span class="std std-doc">shell script</span></a>):</p>
-<ol class="arabic simple">
-<li><p><strong>Prokaryotic mode.</strong> NCBI GTF files for bacteria contain <code class="docutils literal notranslate"><span class="pre">gene</span></code> lines with an empty <code class="docutils literal notranslate"><span class="pre">transcript_id</span> <span class="pre">&quot;&quot;</span></code>. These lines break the transcriptome generation, so we remove them (the same fix nf-core/rnaseq applies to prokaryotic annotations).</p></li>
-<li><p><strong>gffread</strong> builds a fasta file with one sequence per transcript (CDS and non-coding RNAs) from the genome and the filtered GTF. It also writes a transcript-to-gene table.</p></li>
-<li><p><strong>salmon index</strong> prepares the genes and the genome so the reads can be searched quickly.</p></li>
-<li><p><strong>salmon quant</strong> maps the reads to the index (selective alignment) and estimates how many reads come from each transcript, and per gene thanks to the transcript-to-gene table.</p></li>
-</ol>
-<blockquote>
-<div><p>Salmon does not produce an alignment (BAM) file like bowtie2 did. It maps the reads and directly estimates the counts, which makes it much faster.</p>
-</div></blockquote>
+<p>The script runs these steps (see the <a class="reference internal" href="align_and_count_nfcore_rnaseq_prok_mode_shell_script.html"><span class="std std-doc">shell script</span></a>):</p>
+<ul class="simple">
+<li><p><strong>Step 0: Prepare the transcript sequences.</strong> Salmon counts reads per transcript, so bowtie2 aligns the reads to the transcript sequences instead of to the whole genome. gffread builds these sequences from the genome and the GTF, after removing the GTF lines with an empty <code class="docutils literal notranslate"><span class="pre">transcript_id</span> <span class="pre">&quot;&quot;</span></code> that NCBI files for bacteria contain.</p></li>
+<li><p><strong>Step 1:</strong> Generate bowtie index (only required once).</p></li>
+<li><p><strong>Step 2:</strong> Run bowtie2 alignment and sort the output BAM file.</p></li>
+<li><p><strong>Step 3:</strong> Index the sorted BAM file: enables fast random access to specific regions of the data.</p></li>
+<li><p><strong>Step 4:</strong> Run Salmon to count reads per transcript and gene.</p></li>
+</ul>
 </section>
 <section id="results-files-and-interpretation">
 <h2>Results files and interpretation<a class="headerlink" href="#results-files-and-interpretation" title="Link to this heading">#</a></h2>
-<p>Results have been copied back from the container to my local <code class="docutils literal notranslate"><span class="pre">results/salmon_quant</span></code> folder (host). Let’s have a look.</p>
+<p>Results have been copied back from the container to my local <code class="docutils literal notranslate"><span class="pre">results</span></code> folder (host). Let’s have a look.</p>
 <p>The main output files are:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">quant.sf</span></code>: estimated read counts per transcript. The <code class="docutils literal notranslate"><span class="pre">NumReads</span></code> column holds the estimated number of reads.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">quant.genes.sf</span></code>: the same values summarised per gene.</p>
+<li><p>Running <code class="docutils literal notranslate"><span class="pre">bowtie2</span></code>/<code class="docutils literal notranslate"><span class="pre">samtools</span></code> generates:</p>
 <ul>
-<li><p>Out of 4428 genes, 2341 genes have an estimated read count of at least 1.</p></li>
-<li><p>Counts are <em>estimates</em>, so <code class="docutils literal notranslate"><span class="pre">NumReads</span></code> can have decimals.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">aligned.bam</span></code>: the alignments in the order bowtie2 wrote them. Salmon reads this file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">aligned_sorted.bam</span></code> and its index <code class="docutils literal notranslate"><span class="pre">aligned_sorted.bam.bai</span></code>: the alignments sorted by position, for example to look at them in a genome browser.</p></li>
+<li><p>The bowtie2 summary printed on the screen shows that about 64% of the 50000 read pairs aligned.</p></li>
 </ul>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">logs/salmon_quant.log</span></code>: the full Salmon log.</p>
+<li><p>Running <code class="docutils literal notranslate"><span class="pre">salmon</span></code> generates the <code class="docutils literal notranslate"><span class="pre">salmon_quant</span></code> folder:</p>
 <ul>
-<li><p>Look for the <code class="docutils literal notranslate"><span class="pre">Mapping</span> <span class="pre">rate</span></code> line: about 60% of the 50000 read pairs (29837) were counted.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">quant.sf</span></code>: estimated read counts per transcript. The <code class="docutils literal notranslate"><span class="pre">NumReads</span></code> column holds the estimated number of reads.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">quant.genes.sf</span></code>: the same values summarised per gene. Out of 4511 genes, 2426 genes have an estimated read count of at least 1.</p></li>
+<li><p>Counts are <em>estimates</em>, so <code class="docutils literal notranslate"><span class="pre">NumReads</span></code> can have decimals.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">logs/salmon_quant.log</span></code>: the full Salmon log. Look for the <code class="docutils literal notranslate"><span class="pre">Total</span> <span class="pre">#</span> <span class="pre">of</span> <span class="pre">mapped</span> <span class="pre">reads</span></code> line: 31921 read pairs were counted.</p></li>
 </ul>
 </li>
 </ul>
@@ -692,7 +678,7 @@ docker<span class="w"> </span>run<span class="w"> </span>salmon_count<span class
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Shell script used to quantify and count reads with Salmon</p>
+        <p class="prev-next-title">Shell script used to align reads with bowtie2 and count them with Salmon</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -718,8 +704,6 @@ docker<span class="w"> </span>run<span class="w"> </span>salmon_count<span class
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-biological-context-and-script-to-run-in-a-docker-container">Data, biological context and script to run in a Docker container</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objective-of-this-hands-on">Objective of this hands-on</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-we-are-going-to-do">What we are going to do</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Initial considerations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Data, biological context and script to run in a Docker container</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-container">Running a container</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pulling-a-container">Pulling a container</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-our-dockerfile">Writing our Dockerfile</a></li>
