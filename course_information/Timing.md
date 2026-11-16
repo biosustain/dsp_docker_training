@@ -1,12 +1,14 @@
 # Agenda
 
-Day: 26th November 2025
+Day: 18th November 2026
 
 Agenda:
 | Time        | Activity
 |-------------|-------------------------
-| 10:00-10:10 | Welcome + Coffee + Croissants
-| 10:10-11:40 | Introduction to Docker
-| 11:40-12:10 | Lunch break
-| 12:10-13:40 | Building a Dockerfile
-| 13:40-14:00 | Q&A - Bring your own questions about Docker
+| 09:00-09:10 | Welcome + Coffee + Croissants
+| 09:10-09:50 | Introduction to Docker
+| 09:50-10:00 | Coffee break
+| 10:00-11:00 | Docker examples
+| 11:00-11:10 | Coffee break
+| 11:10-12:10 | Building a Dockerfile
+| 12:10-12:30 | Q&A - Bring your own questions about Docker
