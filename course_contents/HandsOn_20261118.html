@@ -398,7 +398,6 @@
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-considerations">Initial considerations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-biological-context-and-script-to-run-in-a-docker-container">Data, biological context and script to run in a Docker container</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objective-of-this-hands-on">Objective of this hands-on</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-we-are-going-to-do">What we are going to do</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-container">Running a container</a></li>
@@ -436,14 +435,9 @@
 </div>
 <p>Alternatively use Github Codespaces to avoid any system incompatibility. You can open directly a GitHub codespace for this specific repository here: <a class="reference external" href="https://codespaces.new/biosustain/dsp_docker_training" rel="noreferrer" target="_blank"><img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg" /></a></p>
 </section>
-<section id="data-biological-context-and-script-to-run-in-a-docker-container">
-<h2>Data, biological context and script to run in a Docker container<a class="headerlink" href="#data-biological-context-and-script-to-run-in-a-docker-container" title="Link to this heading">#</a></h2>
-<p>Biological context for this hands-on in these <a class="reference download internal" download="" href="../_downloads/e3412e734c868cf89b31016010b14a86/Biological_context_for_HandsOn_20251126.pdf"><span class="xref download myst">slides</span></a></p>
-<p><a class="reference internal" href="align_and_count_nfcore_rnaseq_prok_mode_shell_script.html"><span class="std std-doc">Shell script</span></a> that we want to run inside a container.</p>
-</section>
 <section id="objective-of-this-hands-on">
 <h2>Objective of this hands-on<a class="headerlink" href="#objective-of-this-hands-on" title="Link to this heading">#</a></h2>
-<p>Build a Docker image from a Dockerfile that contains <a class="reference external" href="https://bowtie-bio.sourceforge.net/bowtie2/" rel="noreferrer" target="_blank">bowtie2</a>, <a class="reference external" href="https://www.htslib.org/" rel="noreferrer" target="_blank">samtools</a>, <a class="reference external" href="https://github.com/gpertea/gffread" rel="noreferrer" target="_blank">gffread</a> and <a class="reference external" href="https://salmon.readthedocs.io/" rel="noreferrer" target="_blank">Salmon</a>. Then run a script in a container from that image to align the reads of an <em>Escherichia coli</em> RNA-seq sample with bowtie2 and count the reads per transcript and per gene with Salmon, in the same way as the <code class="docutils literal notranslate"><span class="pre">bowtie2_salmon</span></code> mode of <a class="reference external" href="https://nf-co.re/rnaseq" rel="noreferrer" target="_blank">nf-core/rnaseq</a> for prokaryotes. The input data stays on your machine and the results come back to it.</p>
+<p>Build a Docker image from a Dockerfile that contains <a class="reference external" href="https://bowtie-bio.sourceforge.net/bowtie2/" rel="noreferrer" target="_blank">bowtie2</a>, <a class="reference external" href="https://www.htslib.org/" rel="noreferrer" target="_blank">samtools</a>, <a class="reference external" href="https://github.com/gpertea/gffread" rel="noreferrer" target="_blank">gffread</a> and <a class="reference external" href="https://salmon.readthedocs.io/" rel="noreferrer" target="_blank">Salmon</a>. Then run a script in a container from that image to align the reads of an <em>Escherichia coli</em> RNA-seq sample with bowtie2 and quantify the reads per transcript and per gene with Salmon, in the same way as the <code class="docutils literal notranslate"><span class="pre">bowtie2_salmon</span></code> mode of <a class="reference external" href="https://nf-co.re/rnaseq/3.23.0" rel="noreferrer" target="_blank">nf-core/rnaseq</a> for prokaryotes. The input data stays on your machine and the results come back to it.</p>
 </section>
 <section id="what-we-are-going-to-do">
 <h2>What we are going to do<a class="headerlink" href="#what-we-are-going-to-do" title="Link to this heading">#</a></h2>
@@ -468,7 +462,9 @@
 <p>First of all, if you installed Docker Desktop on your machine check that Docker Desktop is open and shows “Running” in the status bar.</p>
 <p>You can also test with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="o">-</span><span class="n">v</span>
-<span class="n">docker</span> <span class="n">info</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">info</span>
 </pre></div>
 </div>
 <p>Once the docker daemon is running you can create and run a new container from an image, we will start with the <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> image, which is hosted on <a class="reference external" href="https://hub.docker.com/" rel="noreferrer" target="_blank">Docker Hub</a>.</p>
@@ -529,12 +525,15 @@ Go to <a class="reference external" href="https://docs.docker.com/reference/dock
 <li><p>bowtie2: align reads to a reference</p></li>
 <li><p>samtools: deal with .bam files (sorting and indexing them)</p></li>
 <li><p>gffread: build the transcript sequences from the genome and the annotation (GTF)</p></li>
-<li><p>salmon: count reads per transcript and per gene</p></li>
+<li><p>salmon: quantify reads per transcript and per gene</p></li>
 </ul>
 </li>
 <li><p>copy the scripts folder</p></li>
 </ul>
-<p>Open a file called Dockerfile. <code class="docutils literal notranslate"><span class="pre">code</span> <span class="pre">docker_file/Dockerfile</span></code></p>
+<p>Open a file called Dockerfile:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">code</span> <span class="n">docker_file</span><span class="o">/</span><span class="n">Dockerfile</span>
+</pre></div>
+</div>
 <p>First let’s specify which base image we want to use. We just pulled <code class="docutils literal notranslate"><span class="pre">debian:latest</span></code>, which today is Debian 13. In the Dockerfile we write the version number instead of <code class="docutils literal notranslate"><span class="pre">latest</span></code>, so the image is built on the same Debian release even when <code class="docutils literal notranslate"><span class="pre">latest</span></code> moves to a newer one:</p>
 <div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="c"># Adding a base image</span>
 <span class="k">FROM</span><span class="w"> </span><span class="s">debian:13</span>
@@ -542,7 +541,7 @@ Go to <a class="reference external" href="https://docs.docker.com/reference/dock
 </div>
 <p>Add some metadata to the image with <code class="docutils literal notranslate"><span class="pre">LABEL</span></code>:</p>
 <div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="c"># Adding some metadata to the image</span>
-<span class="k">LABEL</span><span class="w"> </span>image.description<span class="o">=</span><span class="s2">&quot;A docker image for aligning prokaryotic RNA-seq data with bowtie2 and counting reads with Salmon&quot;</span>
+<span class="k">LABEL</span><span class="w"> </span>image.description<span class="o">=</span><span class="s2">&quot;A docker image for aligning prokaryotic RNA-seq data with bowtie2 and quantifying reads with Salmon&quot;</span>
 <span class="k">LABEL</span><span class="w"> </span>image.author.name<span class="o">=</span><span class="s2">&quot;Your name&quot;</span>
 <span class="k">LABEL</span><span class="w"> </span>image.author.email<span class="o">=</span><span class="s2">&quot;your.email@example.com&quot;</span>
 </pre></div>
@@ -552,7 +551,7 @@ Go to <a class="reference external" href="https://docs.docker.com/reference/dock
 <span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
 </pre></div>
 </div>
-<p>Next, we are going to update the package manager <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> (included in the debian image) and install the software that we need. All four tools are available in <code class="docutils literal notranslate"><span class="pre">apt-get</span></code>, which is the easiest solution. We need to use <code class="docutils literal notranslate"><span class="pre">RUN</span></code> to execute building commands. Removing the <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> package lists at the end of the same <code class="docutils literal notranslate"><span class="pre">RUN</span></code> keeps the image smaller.</p>
+<p>Next, we are going to update the package manager <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> (included in the debian image) and install the software that we need. All four tools are available in <code class="docutils literal notranslate"><span class="pre">apt-get</span></code>, which is the easiest solution. We need to use <code class="docutils literal notranslate"><span class="pre">RUN</span></code> to execute building commands. <code class="docutils literal notranslate"><span class="pre">apt-get</span> <span class="pre">update</span></code> downloads the package lists from the Debian servers into /var/lib/apt/lists/. That catalogue is needed to find and install packages, but once they’re installed it’s no longer needed. Removing the <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> package lists at the end of the same <code class="docutils literal notranslate"><span class="pre">RUN</span></code> keeps the image smaller.</p>
 <div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="c"># Installing required software from apt-get</span>
 <span class="c"># bowtie2: align reads to a reference</span>
 <span class="c"># samtools: deal with .bam files (sorting and indexing them)</span>
@@ -588,11 +587,15 @@ Always check first if your software is in <code class="docutils literal notransl
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>align_count<span class="w"> </span>-f<span class="w"> </span>docker_file/Dockerfile_salmon<span class="w"> </span>.
 </pre></div>
 </div>
+<p>Check now which images do you have locally?</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">images</span>
+</pre></div>
+</div>
 </section>
 <section id="running-a-container-in-interactive-mode">
 <h2>Running a container in interactive mode<a class="headerlink" href="#running-a-container-in-interactive-mode" title="Link to this heading">#</a></h2>
 <p>While we would rather recommend using <em>virtual environments</em> for running specific environments interactively, it can be handy to be familiar with docker’s ability to run a container in interactive mode. This is just useful to check if the expected software is present within a container, but we do not recommend to change anything in the container, instead do it in the Dockerfile.</p>
-<p>This is done by adding the two command line inputs to the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> command: <code class="docutils literal notranslate"><span class="pre">--interactive</span></code> and <code class="docutils literal notranslate"><span class="pre">--tty</span></code>,  which have the equivalents <code class="docutils literal notranslate"><span class="pre">-i</span></code> and <code class="docutils literal notranslate"><span class="pre">-t</span></code>.</p>
+<p>The interactive mode is achieved by adding two command line inputs to the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> command: <code class="docutils literal notranslate"><span class="pre">--interactive</span></code> and <code class="docutils literal notranslate"><span class="pre">--tty</span></code>,  which have the equivalents <code class="docutils literal notranslate"><span class="pre">-i</span></code> and <code class="docutils literal notranslate"><span class="pre">-t</span></code>. <code class="docutils literal notranslate"><span class="pre">-i</span></code> lets you type into the container, and <code class="docutils literal notranslate"><span class="pre">-t</span></code> makes it behave like a terminal. Together they give you an interactive shell.</p>
 <p>Remember you can always run the following to find out what the parameters used in <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> are:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
@@ -605,14 +608,23 @@ Always check first if your software is in <code class="docutils literal notransl
 <p>Then you can check what is in there <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-la</span></code> or in which directory are we <code class="docutils literal notranslate"><span class="pre">pwd</span></code>. Which folder can you see?</p>
 <p>After looking around lets exit the bash with <code class="docutils literal notranslate"><span class="pre">exit</span></code>.</p>
 <p>Check which software versions you included in your Docker image:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>align_count<span class="w"> </span>bowtie2<span class="w"> </span>--version
-docker<span class="w"> </span>run<span class="w"> </span>align_count<span class="w"> </span>samtools<span class="w"> </span>--version
-docker<span class="w"> </span>run<span class="w"> </span>align_count<span class="w"> </span>gffread<span class="w"> </span>--version
-docker<span class="w"> </span>run<span class="w"> </span>align_count<span class="w"> </span>salmon<span class="w"> </span>--version
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">align_count</span> <span class="n">bowtie2</span> <span class="o">--</span><span class="n">version</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">align_count</span> <span class="n">samtools</span> <span class="o">--</span><span class="n">version</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">align_count</span> <span class="n">gffread</span> <span class="o">--</span><span class="n">version</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">align_count</span> <span class="n">salmon</span> <span class="o">--</span><span class="n">version</span>
 </pre></div>
 </div>
 <p>We know that our images are locally available. We also want to check if our containers are still existing.</p>
-<p>To do this try: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">ps</span> <span class="pre">-a</span></code></p>
+<p>To do this try:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">ps</span> <span class="o">-</span><span class="n">a</span>
+</pre></div>
+</div>
 <p>The <code class="docutils literal notranslate"><span class="pre">CONTAINER</span> <span class="pre">ID</span></code> and <code class="docutils literal notranslate"><span class="pre">NAMES</span></code> columns identify each container. The <code class="docutils literal notranslate"><span class="pre">STATUS</span></code> column shows whether it is still running (Up …) or stopped (Exited …). We can see that they are stopped but still existing. There is no reason for this as these containers are supposed to just do one job based on the docker image.</p>
 <p>To remove specific containers, by ID or name:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>rm<span class="w"> </span>&lt;container-id-or-name&gt;
@@ -723,7 +735,6 @@ docker<span class="w"> </span>run<span class="w"> </span>align_count<span class=
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-considerations">Initial considerations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-biological-context-and-script-to-run-in-a-docker-container">Data, biological context and script to run in a Docker container</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objective-of-this-hands-on">Objective of this hands-on</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-we-are-going-to-do">What we are going to do</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-container">Running a container</a></li>
