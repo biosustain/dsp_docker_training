@@ -1,6 +1,6 @@
 FROM python:3.14-slim
 
-RUN pip install pandas==2.3.3
+RUN pip install pandas==3.1.1
 
 COPY main.py /app/
 COPY input.csv /data/
