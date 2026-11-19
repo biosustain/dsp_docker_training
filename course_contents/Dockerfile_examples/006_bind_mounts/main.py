@@ -13,7 +13,8 @@ print(b)
 # Input and output files are in the same folder. Not ideal: it would be better
 # to have the data folder safe from unintended writes.
 
+# Change directory to course_contents/Dockerfile_examples, then enter:
 # docker run \
 #   -u `id -u`:`id -g` \
 #   -v ./006_bind_mounts/my_data:/data \
-#   training:006
+#   training:006_bind_mounts
