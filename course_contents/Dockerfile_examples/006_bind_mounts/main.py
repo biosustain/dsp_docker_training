@@ -14,6 +14,10 @@ print(b)
 # to have the data folder safe from unintended writes.
 
 # Change directory to course_contents/Dockerfile_examples, then enter:
+# docker build \
+#   -f 006_bind_mounts/Dockerfile \
+#   -t training:006_bind_mounts \
+#   006_bind_mounts
 # docker run \
 #   -u `id -u`:`id -g` \
 #   -v ./006_bind_mounts/my_data:/data \

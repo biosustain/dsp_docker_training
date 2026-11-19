@@ -14,6 +14,10 @@ print(b)
 # writes.
 
 # Change directory to course_contents/Dockerfile_examples, then enter:
+# docker build \
+#   -f 007_bind_mounts_in_out/Dockerfile \
+#   -t training:007_bind_mounts_in_out \
+#   007_bind_mounts_in_out
 # docker run \
 #   -u `id -u`:`id -g` \
 #   -v ./007_bind_mounts_in_out/my_data/in:/data/in:ro \
